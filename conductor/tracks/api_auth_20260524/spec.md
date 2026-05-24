@@ -88,4 +88,19 @@ Authorization: Bearer <token>
 - JWT library: `firebase/php-jwt`
 - Token expiry: 1 hour (configurable)
 - Password verification: Use PHP `password_verify()` for bcrypt hashes, fallback to MD5 for legacy OSPOS hashes
-- Store blacklisted tokens in database or cache for logout functionality
+- Store blacklisted tokens in database (`token_blacklist` table) for logout functionality; filter checks blacklist before allowing request
+
+## Implementation Summary
+
+| File | Purpose |
+|------|---------|
+| `app/Config/API.php` | JWT secret, expiry (3600s), algorithm (HS256), CORS config |
+| `app/Config/Routes.php` | API route group (`api/v1/login`, `logout`, `me`) |
+| `app/Config/Filters.php` | `jwtauth` alias and route-to-filter mapping |
+| `app/Controllers/api/v1/Auth.php` | `login()`, `logout()`, `me()` methods |
+| `app/Filters/JWTAuth.php` | Bearer token validation + blacklist check |
+| `app/Models/Employee.php` | Employee model with login/logout (pre-existing) |
+| `app/Models/TokenBlacklist.php` | Token blacklist CRUD |
+| `app/Database/Migrations/20260524000000_add_token_blacklist.php` | Blacklist table migration |
+| `tests/AuthTest.php` | JWT unit tests (3 tests, 7 assertions) |
+| `api_upgrade/API_login.md` | Complete API documentation |
