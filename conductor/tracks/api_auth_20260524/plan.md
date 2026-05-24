@@ -27,22 +27,22 @@ Track ID: api_auth_20260524
     - [x] Test expired token rejection
     - [x] Test invalid signature rejection
     - [x] Test login controller exists (via JWT component tests)
-- [ ] Task: Conductor - User Manual Verification 'Phase 2: Login API Endpoint' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 2: Login API Endpoint' (Protocol in workflow.md)
 
 ## Phase 3: Authentication Middleware
-- [ ] Task: Create JWT Authentication Filter
-    - [ ] Create `app/Filters/JWTAuth.php` implementing `FilterInterface`
-    - [ ] Extract and validate Bearer token from Authorization header
-    - [ ] Decode JWT and verify signature
-    - [ ] Set authenticated user data in request
-    - [ ] Return 401 on invalid/expired token
-- [ ] Task: Register filter in Config
-    - [ ] Add JWT filter to `app/Config/Filters.php`
-    - [ ] Apply filter to API route group
-- [ ] Task: Create Get Current User endpoint
-    - [ ] Add `me()` method to Auth controller
-    - [ ] Return authenticated user info
-- [ ] Task: Write unit tests for JWT Middleware
+- [x] Task: Create JWT Authentication Filter (449de0a)
+    - [x] Create `app/Filters/JWTAuth.php` implementing `FilterInterface`
+    - [x] Extract and validate Bearer token from Authorization header
+    - [x] Decode JWT and verify signature
+    - [x] Set authenticated user data in request
+    - [x] Return 401 on invalid/expired token
+- [x] Task: Register filter in Config (449de0a)
+    - [x] Add JWT filter to `app/Config/Filters.php`
+    - [x] Apply filter to API route group
+- [x] Task: Create Get Current User endpoint (8c90eba)
+    - [x] Add `me()` method to Auth controller
+    - [x] Return authenticated user info
+- [~] Task: Write unit tests for JWT Middleware
     - [ ] Test valid token passes filter
     - [ ] Test missing token returns 401
     - [ ] Test expired token returns 401
