@@ -34,6 +34,7 @@ class Filters extends BaseFilters
         'forcehttps'    => ForceHTTPS::class,
         'pagecache'     => PageCache::class,
         'performance'   => PerformanceMetrics::class,
+        'jwtauth'       => \App\Filters\JWTAuth::class,
     ];
 
     /**
@@ -82,6 +83,7 @@ class Filters extends BaseFilters
 
     public array $filters = [
         'cors' => ['before' => ['api/v1/*']],
+        'jwtauth' => ['before' => ['api/v1/logout', 'api/v1/me']],
     ];
 
     /**
