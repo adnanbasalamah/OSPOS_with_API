@@ -70,8 +70,8 @@ Track ID: api_auth_20260524
     - [x] Include curl examples for each endpoint
     - [x] Document error responses
     - [x] Document authentication flow
-- [~] Task: End-to-end testing
-    - [~] Test full login → access protected route → logout flow (requires running DB/HTTP server)
-    - [ ] Verify CORS headers
-    - [ ] Test error scenarios
+- [x] Task: End-to-end testing (ea68ce0)
+    - [x] Test full login → access protected route → logout flow
+    - [x] Test error scenarios (invalid credentials, missing auth, invalid token)
+    - [~] Verify CORS headers (skipped in test env, needs HTTP server)
 - [ ] Task: Conductor - User Manual Verification 'Phase 5: Documentation & Finalization' (Protocol in workflow.md)
