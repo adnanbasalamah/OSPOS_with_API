@@ -25,9 +25,9 @@ Menyediakan sistem Point of Sale berbasis web yang handal, lengkap, dan mudah di
 - Barcode generation & printing
 - Multi-bahasa
 - Manajemen pajak (VAT, GST, multi-tier)
+- REST API endpoint untuk autentikasi (login/logout via JWT)
 
 ## Planned Features
-- REST API endpoint untuk autentikasi (login/logout)
 - REST API endpoint untuk akses data (items, sales, customers, dll)
 - Integrasi dengan sistem eksternal
 
