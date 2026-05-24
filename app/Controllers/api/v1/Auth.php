@@ -3,6 +3,7 @@
 namespace App\Controllers\api\v1;
 
 use App\Models\Employee;
+use App\Models\TokenBlacklist;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
 use Config\API;
@@ -77,10 +78,28 @@ class Auth extends ResourceController
 
     public function logout(): ResponseInterface
     {
-        return $this->respond([
-            'status' => 'success',
-            'message' => 'Logged out successfully',
-        ]);
+        $authHeader = $this->request->getHeaderLine('Authorization');
+
+        if (empty($authHeader) || !str_starts_with($authHeader, 'Bearer ')) {
+            return $this->failUnauthorized('Missing or invalid authorization header');
+        }
+
+        $token = substr($authHeader, 7);
+
+        try {
+            $apiConfig = config(API::class);
+            $decoded = JWT::decode($token, new Key($apiConfig->jwt_secret, $apiConfig->jwt_algorithm));
+
+            $blacklist = model(TokenBlacklist::class);
+            $blacklist->blacklist($token, $decoded->exp);
+
+            return $this->respond([
+                'status' => 'success',
+                'message' => 'Logged out successfully',
+            ]);
+        } catch (\Exception $e) {
+            return $this->failUnauthorized('Invalid or expired token');
+        }
     }
 
     public function me(): ResponseInterface

@@ -51,12 +51,12 @@ Track ID: api_auth_20260524
 - [ ] Task: Conductor - User Manual Verification 'Phase 3: Authentication Middleware' (Protocol in workflow.md)
 
 ## Phase 4: Logout API Endpoint
-- [ ] Task: Implement token blacklisting for logout
-    - [ ] Create database migration for token blacklist table
-    - [ ] Create `app/Models/TokenBlacklist.php` model
-    - [ ] Add `logout()` method to Auth controller
-    - [ ] Add token to blacklist on logout
-    - [ ] Update authentication filter to check blacklist
+- [x] Task: Implement token blacklisting for logout
+    - [x] Create database migration for token blacklist table
+    - [x] Create `app/Models/TokenBlacklist.php` model
+    - [x] Add `logout()` method to Auth controller
+    - [x] Add token to blacklist on logout
+    - [x] Update authentication filter to check blacklist
 - [ ] Task: Write unit tests for Logout
     - [ ] Test successful logout
     - [ ] Test using blacklisted token returns 401

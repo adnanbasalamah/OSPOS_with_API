@@ -2,6 +2,7 @@
 
 namespace App\Filters;
 
+use App\Models\TokenBlacklist;
 use CodeIgniter\Filters\FilterInterface;
 use CodeIgniter\HTTP\RequestInterface;
 use CodeIgniter\HTTP\ResponseInterface;
@@ -26,6 +27,14 @@ class JWTAuth implements FilterInterface
 
         try {
             $decoded = JWT::decode($token, new Key($apiConfig->jwt_secret, $apiConfig->jwt_algorithm));
+
+            $blacklist = model(TokenBlacklist::class);
+            if ($blacklist->isBlacklisted($token)) {
+                return service('response')
+                    ->setStatusCode(401)
+                    ->setJSON(['status' => 'error', 'message' => 'Token has been revoked']);
+            }
+
             $request->setHeader('X-User-Id', (string) $decoded->sub);
             $request->setHeader('X-User-Name', $decoded->username ?? '');
         } catch (\Exception $e) {
