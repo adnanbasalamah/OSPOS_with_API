@@ -3,9 +3,9 @@
 Track ID: api_auth_20260524
 
 ## Phase 1: Setup & Configuration
-- [ ] Task: Install JWT library via Composer
-    - [ ] Run `composer require firebase/php-jwt`
-    - [ ] Verify autoloading works
+- [x] Task: Install JWT library via Composer (ba42ab2)
+    - [x] Run `composer require firebase/php-jwt`
+    - [x] Verify autoloading works
 - [ ] Task: Create API configuration file
     - [ ] Create `app/Config/API.php` with JWT secret key, token expiry, and CORS settings
     - [ ] Add config loading to project
