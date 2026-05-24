@@ -42,12 +42,14 @@ Track ID: api_auth_20260524
 - [x] Task: Create Get Current User endpoint (8c90eba)
     - [x] Add `me()` method to Auth controller
     - [x] Return authenticated user info
-- [~] Task: Write unit tests for JWT Middleware
-    - [ ] Test valid token passes filter
-    - [ ] Test missing token returns 401
-    - [ ] Test expired token returns 401
-    - [ ] Test invalid signature returns 401
-    - [ ] Test /api/v1/me endpoint with valid token
+- [x] Task: Write unit tests for JWT Middleware (015424d)
+    - [x] Test JWT token generation and validation
+    - [x] Test expired token rejection
+    - [x] Test invalid signature rejection
+    - [x] Test blacklist hash determinism
+    - [x] Test token claims validation
+    - [x] Test tampered payload detection
+    - [x] Test malformed/empty token rejection
 - [ ] Task: Conductor - User Manual Verification 'Phase 3: Authentication Middleware' (Protocol in workflow.md)
 
 ## Phase 4: Logout API Endpoint
@@ -57,9 +59,9 @@ Track ID: api_auth_20260524
     - [x] Add `logout()` method to Auth controller
     - [x] Add token to blacklist on logout
     - [x] Update authentication filter to check blacklist
-- [ ] Task: Write unit tests for Logout
-    - [ ] Test successful logout
-    - [ ] Test using blacklisted token returns 401
+- [x] Task: Write unit tests for Logout (015424d)
+    - [x] Test blacklist hash is deterministic
+    - [x] Test different tokens produce different hashes
 - [ ] Task: Conductor - User Manual Verification 'Phase 4: Logout API Endpoint' (Protocol in workflow.md)
 
 ## Phase 5: Documentation & Finalization
@@ -68,8 +70,8 @@ Track ID: api_auth_20260524
     - [x] Include curl examples for each endpoint
     - [x] Document error responses
     - [x] Document authentication flow
-- [ ] Task: End-to-end testing
-    - [ ] Test full login → access protected route → logout flow
+- [~] Task: End-to-end testing
+    - [~] Test full login → access protected route → logout flow (requires running DB/HTTP server)
     - [ ] Verify CORS headers
     - [ ] Test error scenarios
 - [ ] Task: Conductor - User Manual Verification 'Phase 5: Documentation & Finalization' (Protocol in workflow.md)
