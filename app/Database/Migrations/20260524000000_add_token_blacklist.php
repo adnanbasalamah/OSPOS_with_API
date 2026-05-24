@@ -30,7 +30,7 @@ class Migration_add_token_blacklist extends Migration
         $this->forge->addKey('id', true);
         $this->forge->addKey('token_hash');
         $this->forge->addKey('expires_at');
-        $this->forge->createTable('token_blacklist', true);
+        $this->forge->createTable('token_blacklist', true, ['dbprefix' => '']);
     }
 
     public function down(): void
