@@ -85,23 +85,15 @@ class Auth extends ResourceController
 
     public function me(): ResponseInterface
     {
-        $authHeader = $this->request->getHeaderLine('Authorization');
+        $userId = $this->request->getHeaderLine('X-User-Id');
+        $username = $this->request->getHeaderLine('X-User-Name');
 
-        if (empty($authHeader) || !str_starts_with($authHeader, 'Bearer ')) {
-            return $this->failUnauthorized('Missing or invalid authorization header');
-        }
-
-        $token = substr($authHeader, 7);
-        $apiConfig = config(API::class);
-
-        try {
-            $decoded = JWT::decode($token, new Key($apiConfig->jwt_secret, $apiConfig->jwt_algorithm));
-        } catch (\Exception $e) {
-            return $this->failUnauthorized('Invalid or expired token');
+        if (empty($userId)) {
+            return $this->failUnauthorized('Authentication required');
         }
 
         $employee = model(Employee::class);
-        $info = $employee->get_info($decoded->sub);
+        $info = $employee->get_info((int) $userId);
 
         if (!$info) {
             return $this->failNotFound('User not found');
@@ -111,7 +103,7 @@ class Auth extends ResourceController
             'status' => 'success',
             'data' => [
                 'id' => (int) $info->person_id,
-                'username' => $decoded->username,
+                'username' => $username,
                 'email' => $info->email ?? '',
                 'person_id' => (int) $info->person_id,
             ],
