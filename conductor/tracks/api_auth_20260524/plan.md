@@ -9,9 +9,9 @@ Track ID: api_auth_20260524
 - [x] Task: Create API configuration file (4302e16)
     - [x] Create `app/Config/API.php` with JWT secret key, token expiry, and CORS settings
     - [x] Add config loading to project (automatic via CI4 config() helper)
-- [ ] Task: Set up API routing
-    - [ ] Add API route group in `app/Config/Routes.php` with `/api/v1` prefix
-    - [ ] Add CORS headers handling
+- [x] Task: Set up API routing (f1044d7)
+    - [x] Add API route group in `app/Config/Routes.php` with `/api/v1` prefix
+    - [x] Add CORS headers handling via filters
 - [ ] Task: Conductor - User Manual Verification 'Phase 1: Setup & Configuration' (Protocol in workflow.md)
 
 ## Phase 2: Login API Endpoint
