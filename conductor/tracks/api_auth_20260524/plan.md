@@ -12,10 +12,10 @@ Track ID: api_auth_20260524
 - [x] Task: Set up API routing (f1044d7)
     - [x] Add API route group in `app/Config/Routes.php` with `/api/v1` prefix
     - [x] Add CORS headers handling via filters
-- [ ] Task: Conductor - User Manual Verification 'Phase 1: Setup & Configuration' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 1: Setup & Configuration' (Protocol in workflow.md)
 
 ## Phase 2: Login API Endpoint
-- [ ] Task: Create Login API Controller
+- [~] Task: Create Login API Controller
     - [ ] Create `app/Controllers/api/v1/Auth.php` with `login()` method
     - [ ] Implement username/password validation against `ospos_employees` table
     - [ ] Implement password verification (bcrypt with MD5 fallback for legacy)
