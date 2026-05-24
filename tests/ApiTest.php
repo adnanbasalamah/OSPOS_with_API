@@ -10,11 +10,6 @@ class ApiTest extends CIUnitTestCase
     private const VALID_USERNAME = 'admin';
     private const VALID_PASSWORD = 'abuya313500';
 
-    protected function setUp(): void
-    {
-        parent::setUp();
-    }
-
     public function testLoginSuccess(): void
     {
         $response = $this->post('api/v1/login', [
@@ -42,9 +37,7 @@ class ApiTest extends CIUnitTestCase
         ]);
 
         $response->assertStatus(401);
-        $body = json_decode($response->getJSON(), true);
-        $this->assertArrayHasKey('messages', $body);
-        $this->assertEquals('Invalid username or password', $body['messages']['error']);
+        $response->assertJSONFragment(['status' => 'error', 'message' => 'Invalid username or password']);
     }
 
     public function testLoginFailedMissingFields(): void
@@ -65,9 +58,7 @@ class ApiTest extends CIUnitTestCase
         ]);
 
         $response->assertStatus(401);
-        $body = json_decode($response->getJSON(), true);
-        $this->assertArrayHasKey('messages', $body);
-        $this->assertEquals('Invalid username or password', $body['messages']['error']);
+        $response->assertJSONFragment(['status' => 'error', 'message' => 'Invalid username or password']);
     }
 
     public function testMeWithoutTokenReturns401(): void

@@ -31,7 +31,7 @@ class Auth extends ResourceController
         $query = $builder->getWhere(['username' => $username, 'deleted' => 0], 1);
 
         if ($query->getNumRows() !== 1) {
-            return $this->failUnauthorized('Invalid username or password');
+            return $this->respond(['status' => 'error', 'message' => 'Invalid username or password'], 401);
         }
 
         $row = $query->getRow();
@@ -48,7 +48,7 @@ class Auth extends ResourceController
         }
 
         if (!$valid) {
-            return $this->failUnauthorized('Invalid username or password');
+            return $this->respond(['status' => 'error', 'message' => 'Invalid username or password'], 401);
         }
 
         $apiConfig = config(API::class);
@@ -81,7 +81,7 @@ class Auth extends ResourceController
         $authHeader = $this->request->getHeaderLine('Authorization');
 
         if (empty($authHeader) || !str_starts_with($authHeader, 'Bearer ')) {
-            return $this->failUnauthorized('Missing or invalid authorization header');
+            return $this->respond(['status' => 'error', 'message' => 'Missing or invalid authorization header'], 401);
         }
 
         $token = substr($authHeader, 7);
@@ -98,7 +98,7 @@ class Auth extends ResourceController
                 'message' => 'Logged out successfully',
             ]);
         } catch (\Exception $e) {
-            return $this->failUnauthorized('Invalid or expired token');
+            return $this->respond(['status' => 'error', 'message' => 'Invalid or expired token'], 401);
         }
     }
 
@@ -108,7 +108,7 @@ class Auth extends ResourceController
         $username = $this->request->getHeaderLine('X-User-Name');
 
         if (empty($userId)) {
-            return $this->failUnauthorized('Authentication required');
+            return $this->respond(['status' => 'error', 'message' => 'Authentication required'], 401);
         }
 
         $employee = model(Employee::class);

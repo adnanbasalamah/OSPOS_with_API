@@ -12,7 +12,7 @@ use Firebase\JWT\Key;
 
 class JWTAuth implements FilterInterface
 {
-    public function before(RequestInterface $request, $arguments = null)
+    public function before(RequestInterface $request, $arguments = null): RequestInterface|ResponseInterface|null
     {
         $authHeader = $request->getHeaderLine('Authorization');
 
@@ -27,21 +27,25 @@ class JWTAuth implements FilterInterface
 
         try {
             $decoded = JWT::decode($token, new Key($apiConfig->jwt_secret, $apiConfig->jwt_algorithm));
+        } catch (\Exception $e) {
+            return service('response')
+                ->setStatusCode(401)
+                ->setJSON(['status' => 'error', 'message' => 'Invalid or expired token']);
+        }
 
+        try {
             $blacklist = model(TokenBlacklist::class);
             if ($blacklist->isBlacklisted($token)) {
                 return service('response')
                     ->setStatusCode(401)
                     ->setJSON(['status' => 'error', 'message' => 'Token has been revoked']);
             }
-
-            $request->setHeader('X-User-Id', (string) $decoded->sub);
-            $request->setHeader('X-User-Name', $decoded->username ?? '');
         } catch (\Exception $e) {
-            return service('response')
-                ->setStatusCode(401)
-                ->setJSON(['status' => 'error', 'message' => 'Invalid or expired token']);
+            log_message('error', 'Blacklist check failed: ' . $e->getMessage());
         }
+
+        $request->setHeader('X-User-Id', (string) $decoded->sub);
+        $request->setHeader('X-User-Name', $decoded->username ?? '');
 
         return $request;
     }

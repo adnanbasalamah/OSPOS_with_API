@@ -22,6 +22,7 @@ class TokenBlacklist extends Model
 
     public function isBlacklisted(string $token): bool
     {
+        $this->cleanExpired();
         $hash = hash('sha256', $token);
         return $this->where('token_hash', $hash)
             ->where('expires_at >', date('Y-m-d H:i:s'))
