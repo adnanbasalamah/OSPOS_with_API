@@ -1,0 +1,8 @@
+{
+  "track_id": "api_auth_20260524",
+  "type": "feature",
+  "status": "new",
+  "created_at": "2026-05-24T12:00:00Z",
+  "updated_at": "2026-05-24T12:00:00Z",
+  "description": "Build REST API authentication (login/logout) for OSPOS users"
+}
