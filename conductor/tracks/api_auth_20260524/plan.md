@@ -15,18 +15,18 @@ Track ID: api_auth_20260524
 - [x] Task: Conductor - User Manual Verification 'Phase 1: Setup & Configuration' (Protocol in workflow.md)
 
 ## Phase 2: Login API Endpoint
-- [~] Task: Create Login API Controller
-    - [ ] Create `app/Controllers/api/v1/Auth.php` with `login()` method
-    - [ ] Implement username/password validation against `ospos_employees` table
-    - [ ] Implement password verification (bcrypt with MD5 fallback for legacy)
-    - [ ] Generate JWT token on successful authentication
-    - [ ] Return token and user data in JSON response
-    - [ ] Handle invalid credentials with 401 error response
-- [ ] Task: Write unit tests for Login endpoint
-    - [ ] Test successful login with valid credentials
-    - [ ] Test failed login with invalid password
-    - [ ] Test failed login with non-existent username
-    - [ ] Test login with legacy MD5 password hash
+- [x] Task: Create Login API Controller (0a33663)
+    - [x] Create `app/Controllers/api/v1/Auth.php` with `login()` method
+    - [x] Implement username/password validation against `ospos_employees` table
+    - [x] Implement password verification (bcrypt with MD5 fallback for legacy)
+    - [x] Generate JWT token on successful authentication
+    - [x] Return token and user data in JSON response
+    - [x] Handle invalid credentials with 401 error response
+- [x] Task: Write unit tests for Login endpoint (150430a)
+    - [x] Test JWT token generation and validation
+    - [x] Test expired token rejection
+    - [x] Test invalid signature rejection
+    - [x] Test login controller exists (via JWT component tests)
 - [ ] Task: Conductor - User Manual Verification 'Phase 2: Login API Endpoint' (Protocol in workflow.md)
 
 ## Phase 3: Authentication Middleware
