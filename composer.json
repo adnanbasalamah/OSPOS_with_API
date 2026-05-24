@@ -1,0 +1,37 @@
+{
+    "name": "kasirbaru/app",
+    "description": "Open Source Point of Sale",
+    "type": "project",
+    "require": {
+        "php": ">=8.1",
+        "codeigniter4/framework": "^4.6",
+        "dompdf/dompdf": "^2.0",
+        "picqer/php-barcode-generator": "^2.4",
+        "predis/predis": "^2.2",
+        "firebase/php-jwt": "^7.0",
+        "tamtamchik/namecase": "^3.0",
+        "laminas/laminas-escaper": "^2.14"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^11.2",
+        "fakerphp/faker": "^1.24",
+        "kint-php/kint": "^6.0",
+        "codeigniter/coding-standard": "^1.7",
+        "friendsofphp/php-cs-fixer": "^3.47",
+        "nexusphp/cs-config": "^3.6",
+        "predis/predis": "^2.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/",
+            "Config\\": "app/Config/"
+        }
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "sort-packages": true,
+        "allow-plugins": {
+            "phpstan/extension-installer": false
+        }
+    }
+}
