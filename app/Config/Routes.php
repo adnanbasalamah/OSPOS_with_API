@@ -11,6 +11,7 @@ $routes->group('api/v1', ['namespace' => 'App\Controllers\api\v1'], static funct
     $routes->post('login', 'Auth::login');
     $routes->post('logout', 'Auth::logout');
     $routes->get('me', 'Auth::me');
+    $routes->get('items', 'Items::index');
 });
 
 $routes->get('/', 'Login::index');
