@@ -6,7 +6,7 @@ use CodeIgniter\Config\BaseConfig;
 
 class API extends BaseConfig
 {
-    public string $jwt_secret = 'kasirbaru_jwt_secret_change_me';
+    public string $jwt_secret = 'kasirbaru_jwt_secret_change_this_to_a_random_64_char_string';
 
     public int $jwt_expiry = 3600;
 
