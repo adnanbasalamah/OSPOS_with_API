@@ -260,6 +260,12 @@ function get_payment_options(): array
         $payments[lang('Sales.credit')] = lang('Sales.credit');
         $payments[lang('Sales.cash')] = lang('Sales.cash');
         $payments[lang('Sales.debit')] = lang('Sales.debit');
+    } elseif ($config['payment_options_order'] == 'ikhwan') {
+        $payments[lang('Sales.cash')] = lang('Sales.cash');
+        $payments['Debit'] = 'Debit';
+        $payments['Transfer'] = 'Transfer';
+        $payments['QRIS'] = 'QRIS';
+        $payments[lang('Sales.credit')] = lang('Sales.credit');
     } else { // Default: if ($config['payment_options_order == 'cashdebitcredit')
         $payments[lang('Sales.cash')] = lang('Sales.cash');
         $payments[lang('Sales.debit')] = lang('Sales.debit');
