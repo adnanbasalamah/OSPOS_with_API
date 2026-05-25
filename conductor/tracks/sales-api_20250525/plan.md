@@ -1,6 +1,6 @@
 # Plan: Implement Sales API for Android
 
-## Phase 1: Items Search API
+## Phase 1: Items Search API [checkpoint: 616a443]
 
 - [x] Task: Create Items API controller file and register route (GET /api/v1/items)
     - [x] Create `app/Controllers/api/v1/Items.php` extending ResourceController
@@ -20,7 +20,7 @@
     - [x] Join item_quantities for stock, suppliers for supplier_name
     - [x] Return JSON response with items data
     - [x] Run tests and confirm they pass (Green phase)
-- [ ] Task: Conductor - User Manual Verification 'Items Search API' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Items Search API' (Protocol in workflow.md)
 
 ## Phase 2: Customers API
 
