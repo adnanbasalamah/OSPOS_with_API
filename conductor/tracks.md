@@ -5,7 +5,12 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [~] **Track: Implement Sales API for Android**
+- [x] **Track: Implement Sales API for Android**
 *Link: [./tracks/sales-api_20250525/](./tracks/sales-api_20250525/)*
+
+---
+
+- [ ] **Track: Port REST API from Old System**
+*Link: [./tracks/port-rest-api_20250525/](./tracks/port-rest-api_20250525/)*
 
 
