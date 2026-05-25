@@ -272,9 +272,6 @@ function get_payment_options(): array
         $payments[lang('Sales.credit')] = lang('Sales.credit');
     }
 
-    $payments[lang('Sales.due')] = lang('Sales.due');
-    $payments[lang('Sales.check')] = lang('Sales.check');
-
     // If India (list of country codes include India) then include Unified Payment Interface
     if (stripos($config['country_codes'], 'IN') !== false) {
         $payments[lang('Sales.upi')] = lang('Sales.upi');
