@@ -3,6 +3,8 @@
 namespace App\Controllers\api\v1;
 
 use App\Libraries\Sale_lib;
+use App\Models\Customer;
+use App\Models\Employee;
 use App\Models\Item;
 use App\Models\Item_quantity;
 use App\Models\Sale;
@@ -197,5 +199,84 @@ class Sales extends ResourceController
                 'item_count' => count($items),
             ],
         ], 201);
+    }
+
+    public function show($id = null): ResponseInterface
+    {
+        $saleModel = model(Sale::class);
+        $saleInfo = $saleModel->get_info((int)$id)->getRow();
+
+        if (empty($saleInfo) || !isset($saleInfo->sale_id)) {
+            return $this->respond([
+                'status' => 'error',
+                'message' => 'Transaksi penjualan tidak ditemukan.',
+            ], 404);
+        }
+
+        $customerModel = model(Customer::class);
+        $customerInfo = $customerModel->get_info((int)$saleInfo->customer_id);
+
+        $employeeModel = model(Employee::class);
+        $employeeInfo = $employeeModel->get_info((int)$saleInfo->employee_id);
+
+        $itemsResult = $saleModel->get_sale_items_ordered((int)$id);
+        $items = [];
+        foreach ($itemsResult->getResult() as $item) {
+            $subtotal = (float)$item->quantity_purchased * (float)$item->item_unit_price;
+            if ((int)$item->discount_type === PERCENT) {
+                $subtotal -= ($subtotal * (float)$item->discount / 100);
+            } else {
+                $subtotal -= (float)$item->discount;
+            }
+
+            $items[] = [
+                'item_id' => (int)$item->item_id,
+                'name' => $item->name ?? '',
+                'item_number' => $item->item_number ?? '',
+                'quantity' => (float)$item->quantity_purchased,
+                'price' => (float)$item->item_unit_price,
+                'discount' => (float)$item->discount,
+                'discount_type' => (int)$item->discount_type,
+                'subtotal' => round(max(0, $subtotal), 2),
+            ];
+        }
+
+        $paymentsResult = $saleModel->get_sale_payments((int)$id);
+        $payments = [];
+        foreach ($paymentsResult->getResult() as $payment) {
+            $payments[] = [
+                'payment_type' => $payment->payment_type ?? '',
+                'payment_amount' => (float)($payment->payment_amount ?? 0),
+                'cash_refund' => (float)($payment->cash_refund ?? 0),
+            ];
+        }
+
+        $total = 0;
+        foreach ($items as $item) {
+            $total += $item['subtotal'];
+        }
+        $total = round($total, 2);
+
+        return $this->respond([
+            'status' => 'success',
+            'data' => [
+                'sale_id' => (int)$saleInfo->sale_id,
+                'sale_id_display' => 'POS ' . $saleInfo->sale_id,
+                'sale_time' => $saleInfo->sale_time ?? '',
+                'customer' => [
+                    'person_id' => (int)$saleInfo->customer_id,
+                    'name' => trim(($customerInfo->first_name ?? '') . ' ' . ($customerInfo->last_name ?? '')),
+                    'phone_number' => $customerInfo->phone_number ?? '',
+                ],
+                'employee' => [
+                    'person_id' => (int)$saleInfo->employee_id,
+                    'name' => trim(($employeeInfo->first_name ?? '') . ' ' . ($employeeInfo->last_name ?? '')),
+                ],
+                'items' => $items,
+                'payments' => $payments,
+                'total' => $total,
+                'comment' => $saleInfo->comment ?? '',
+            ],
+        ]);
     }
 }
