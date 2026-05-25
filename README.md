@@ -1,143 +1,207 @@
-<p align="center"><img src="https://raw.githubusercontent.com/opensourcepos/opensourcepos/master/branding/emblem.svg" alt="Open Source Point of Sale Logo" width="auto" height="200"></p>
-<h3 align="center">Open Source Point of Sale</h3>
+<div align="center">
+  <img src="https://raw.githubusercontent.com/opensourcepos/opensourcepos/master/branding/emblem.svg" alt="OSPOS Logo" height="120">
+  <h1>OSPOS with API</h1>
+  <p><strong>Open Source Point of Sale — Dilengkapi REST API Modern</strong></p>
+  <p>
+    <a href="#fitur">Fitur</a> ·
+    <a href="#api-endpoints">API</a> ·
+    <a href="#tech-stack">Tech Stack</a> ·
+    <a href="#instalasi">Instalasi</a> ·
+    <a href="#dokumentasi">Dokumentasi</a>
+  </p>
+  <p>
+    <img src="https://img.shields.io/badge/PHP-8.1%2B-777BB4?logo=php&logoColor=white" alt="PHP">
+    <img src="https://img.shields.io/badge/CodeIgniter-4.6-EF4223?logo=codeigniter&logoColor=white" alt="CodeIgniter">
+    <img src="https://img.shields.io/badge/MySQL-5.7%2B-4479A1?logo=mysql&logoColor=white" alt="MySQL">
+    <img src="https://img.shields.io/badge/JWT-Auth-000000?logo=jsonwebtokens&logoColor=white" alt="JWT">
+    <img src="https://img.shields.io/badge/License-MIT-yellow" alt="License">
+  </p>
+</div>
 
-<p align="center">
-  <a href="#-introduction">Introduction</a> · <a href="#-live-demo">Demo</a> · <a href="#-installation">Installation</a> · 
-  <a href="#-contributing">Contributing</a> · <a href="#-reporting-bugs">Bugs</a> · <a href="#-faq">FAQ</a> · 
-  <a href="#-keep-the-machine-running">Donate</a> · <a href="#-license">License</a> · <a href="#-credits">Credits</a>
-</p>
+---
 
-<p align="center">
-<a href="https://app.travis-ci.com/opensourcepos/opensourcepos" target="_blank"><img src="https://api.travis-ci.com/opensourcepos/opensourcepos.svg?branch=master" alt="Build Status"></a>
-<a href="https://app.gitter.im/#/room/#opensourcepos_Lobby:gitter.im?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge" target="_blank"><img src="https://badges.gitter.im/jekkos/opensourcepos.svg" alt="Join the chat at https://app.gitter.im"></a>
-<a href="https://badge.fury.io/gh/opensourcepos%2Fopensourcepos" target="_blank"><img src="https://badge.fury.io/gh/opensourcepos%2Fopensourcepos.svg" alt="Project Version"></a>
-<a href="https://translate.opensourcepos.org/engage/opensourcepos/?utm_source=widget" target="_blank"><img src="https://translate.opensourcepos.org/widgets/opensourcepos/-/svg-badge.svg" alt="Translation Status"></a>
-</p>
+## Tentang
 
-## 👋 Introduction
+**OSPOS with API** adalah platform Point of Sale berbasis web yang dikembangkan dari [Open Source Point of Sale](https://github.com/opensourcepos/opensourcepos) dengan tambahan **REST API modern** menggunakan autentikasi **JWT (JSON Web Token)**. Cocok untuk retailer, restoran, dan bisnis kecil-menengah yang membutuhkan sistem POS terintegrasi dengan aplikasi pihak ketiga.
 
-Open Source Point of Sale is a web-based point of sale system. The application is written in PHP, uses MySQL (or MariaDB) as the data storage back-end, and has a simple but intuitive user interface.
+Versi: **3.4.1** · Framework: **CodeIgniter 4.6** · Database: **MySQL/MariaDB**
 
-The latest `3.4` version is a complete overhaul of the original software. It uses CodeIgniter 4 as a framework and is based on Bootstrap 3 using Bootswatch themes. Along with improved functionality and security.
+---
 
-The features include:
+## Fitur
 
-- Stock management (items and kits with an extensible list of attributes)
-- VAT, GST, customer, and multi tiers taxation
-- Sale register with transactions logging
-- Quotation and invoicing
-- Expenses logging
-- Cash up function
-- Printing and emailing of receipts, invoices and quotations
-- Barcode generation and printing
-- Database of customers and suppliers
-- Multiuser with permission control
-- Reporting on sales, orders, expenses, inventory status and more
-- Receivings
-- Gift cards
-- Rewards
-- Restaurant tables
-- Messaging (SMS)
-- Multilanguage
-- Selectable Bootstrap based UI theme with Bootswatch
-- MailChimp integration
-- Optional Google reCAPTCHA to protect the login page from brute force attacks
-- GDPR ready
+### POS Inti
+- Manajemen stok barang & item kit dengan atribut ekstensibel
+- Pencatatan transaksi penjualan lengkap dengan diskon dan pajak
+- Quotation & invoicing dengan cetak PDF (Dompdf)
+- Penerimaan barang (receivings / GRN)
+- Manajemen pelanggan, pemasok, dan karyawan
+- Kontrol akses berbasis peran (RBAC) dengan sistem permission
+- Barcode generation & printing (Code39, EAN, dll)
+- Pajak multi-tier (VAT, GST, pajak pelanggan)
+- Gift cards & program rewards
+- Manajemen meja restoran
+- Laporan penjualan, stok, pajak, diskon, pembayaran
+- Cash up function (rekap kasir harian)
+- Pencatatan pengeluaran (expenses)
+- Multi-bahasa (45+ bahasa termasuk Indonesia)
+- SMS messaging & MailChimp integration
+- Google reCAPTCHA pada halaman login
 
-## 🧪 Live Demo
+### REST API (`/api/v1`)
+- Autentikasi JWT (HS256) dengan token blacklist
+- **Items** — CRUD, cari berdasarkan SKU/nama/kategori/barcode
+- **Customers** — CRUD, cari, detail per ID
+- **Suppliers** — daftar pemasok
+- **Categories** — daftar kategori barang
+- **Stock** — cek stok by SKU, barang habis, barang minimal, update stok
+- **Receivings** — transaksi penerimaan barang
+- **Sales** — buat transaksi, detail penjualan, daftar tipe pembayaran
+- CORS support untuk integrasi dengan aplikasi frontend/ mobile
 
-We've got a live version of our latest master running for you to play around with and test everything out. It's a containerized install that will reinitialize when new functionality is merged into our code repository.
+---
 
-You can [find the demo here](https://demo.opensourcepos.org/) and log in with these credentials.  
-👤 Username `admin`  
-🔒 Password `pointofsale`
+## API Endpoints
 
-If you bump into an issue, please check [the status page here](https://status.opensourcepos.org/) to confirm if the server is up and running.
+| Method | Endpoint | Auth | Deskripsi |
+|--------|----------|:----:|-----------|
+| POST | `/api/v1/login` | ✗ | Mendapatkan JWT token |
+| POST | `/api/v1/logout` | ✓ | Revoke token |
+| GET | `/api/v1/me` | ✓ | Info user saat ini |
+| GET | `/api/v1/items` | ✓ | Daftar / cari barang |
+| POST | `/api/v1/items` | ✓ | Tambah barang baru |
+| GET | `/api/v1/customers` | ✓ | Daftar / cari pelanggan |
+| POST | `/api/v1/customers` | ✓ | Tambah pelanggan baru |
+| GET | `/api/v1/customers/{id}` | ✓ | Detail pelanggan |
+| GET | `/api/v1/suppliers` | ✓ | Daftar pemasok |
+| GET | `/api/v1/categories` | ✓ | Daftar kategori |
+| GET | `/api/v1/stock/by-sku/{sku}` | ✓ | Cek stok by SKU |
+| GET | `/api/v1/stock/out-of-stock` | ✓ | Barang habis |
+| GET | `/api/v1/stock/below-minimum` | ✓ | Barang di bawah minimum |
+| PATCH | `/api/v1/stock/update/{sku}` | ✓ | Update stok |
+| GET | `/api/v1/sales/payment-types` | ✓ | Tipe pembayaran |
+| POST | `/api/v1/sales` | ✓ | Buat transaksi penjualan |
+| GET | `/api/v1/sales/{id}` | ✓ | Detail penjualan |
+| GET | `/api/v1/receivings/items` | ✓ | Cari barang untuk receiving |
+| GET | `/api/v1/receivings/stock-locations` | ✓ | Daftar lokasi stok |
+| POST | `/api/v1/receivings` | ✓ | Complete receiving |
 
-## 🖥️ Development Demo
+---
 
-Besides the demo of the latest master, we also have a development server that builds when there's a new commit to our repository. It's mainly used for testing out new code before merging it into the master. [It can be found here](https://dev.opensourcepos.org/).
+## Tech Stack
 
-The log in credentials are the same as the regular live demo.
+| Layer | Teknologi |
+|-------|-----------|
+| **Language** | PHP 8.1+ |
+| **Framework** | CodeIgniter 4.6 |
+| **Database** | MySQL 5.7+ / MariaDB 10.3+ |
+| **API Auth** | JWT (firebase/php-jwt) HS256 |
+| **Frontend** | Bootstrap 3 + Bootswatch themes |
+| **Barcode** | picqer/php-barcode-generator |
+| **PDF** | Dompdf 2.0 |
+| **Cache** | Redis (predis) |
+| **Container** | Docker & Docker Compose |
+| **Testing** | PHPUnit 11 |
 
-## 💾 Installation
+---
 
-Please **refrain from creating issues** about installation problems before having read the FAQ and going through existing GitHub issues. We have a build pipeline that checks the sanity of our latest repository commit, and in case the application itself is broken then our build will be as well.
+## Instalasi
 
-This application can be set up in _many_ different ways and we only support the ones described in [the INSTALL.md file](INSTALL.md).
+### Persiapan
+- PHP ≥ 8.1
+- MySQL 5.7+ / MariaDB 10.3+
+- Apache with mod_rewrite / Nginx
+- Composer
 
-For more information and recommendations on support hardware, like receipt printers and barcode scanners, read [this page](https://github.com/opensourcepos/opensourcepos/wiki/Supported-hardware-datasheet) on our wiki.
+### Langkah Cepat
 
-## ✨ Contributing
+```bash
+# Clone repositori
+git clone https://github.com/adnanbasalamah/OSPOS_with_API.git
+cd OSPOS_with_API
 
-Everyone is more than welcome to help us improve this project. If you think you've got something to help us go forward, feel free to open a [pull request]() or join the conversation on [Element](https://app.gitter.im/#/room/#opensourcepos_Lobby:gitter.im).
+# Install dependencies
+composer install
 
-Want to help translate Open Source Point of Sale in your language? You can find [our Weblate here](https://translate.opensourcepos.org), sign up, and start translating. You can subscribe to different languages to receive a notification once a new string is added or needs updating. Have a look at our [guidelines](https://github.com/opensourcepos/opensourcepos/wiki/Adding-translations) below to help you get started.
+# Salin file environment
+cp .env.example .env
 
-Only with the help of the community, we can keep language translations up to date. Thanks!
+# Edit .env — sesuaikan konfigurasi database
+#   database.default.hostname = localhost
+#   database.default.database = kasirbaru
+#   database.default.username = root
+#   database.default.password =
 
-## 🐛 Reporting Bugs
+# Import database
+mysql -u root -p kasirbaru < app/Database/database.sql
 
-Before creating a new issue, you'll need copy and include the info under the `System Info` tab in the configuration section in most cases. If that information is not provided in full, your issue might be tagged as pending.
+# Jalankan
+php spark serve
+```
 
-If you're reporting a potential security issue, please refer to our security policy found in the [SECURITY.md](SECURITY.md) file.
+Atau dengan Docker:
 
-NOTE: If you're running non-release code, please make sure you always run the latest database upgrade script and download the latest master code.
+```bash
+docker compose up -d
+```
 
-## 📖 FAQ
+---
 
-- If you get the message `system folder missing`, then you have cloned the source using git and you need to run a build first. Check [INSTALL.md](INSTALL.md) for instructions or download latest zip file from [GitHub releases](https://github.com/opensourcepos/opensourcepos/releases) instead.
+## Struktur Direktori
 
-- If at login time you read `The installation is not correct, check your php.ini file.`, please check the error_log in `public` folder to understand what's wrong and make sure you read the [INSTALL.md](INSTALL.md). To know how to enable `error_log`, please read the comment in [issue #1770](https://github.com/opensourcepos/opensourcepos/issues/1770#issuecomment-355177943).
+```
+├── app/
+│   ├── Config/          # Konfigurasi aplikasi
+│   ├── Controllers/
+│   │   ├── api/v1/      # REST API controllers
+│   │   ├── Sales.php    # POS sales register
+│   │   ├── Items.php    # Manajemen barang
+│   │   └── ...
+│   ├── Database/        # Migrations & SQL scripts
+│   ├── Filters/         # JWTAuth, CORS filters
+│   ├── Helpers/         # Helper functions
+│   ├── Libraries/       # Barcode, Sale, Tax, dll
+│   ├── Models/          # Data models
+│   ├── Language/        # 45+ bahasa
+│   └── Views/           # Template views
+├── api_upgrade/         # Dokumentasi API
+├── conductor/           # Manajemen proyek
+├── docker-compose.yml   # Docker orchestration
+├── Dockerfile           # Multi-stage build
+└── public/              # Web root
+```
 
-- If you installed your OSPOS under a web server subdir, please edit `public/.htaccess` and go to the lines with the comments `if in web root` or `if in subdir`, uncomment one and replace `<OSPOS path>` with your path, and follow the instruction on the second comment line. If you face more issues, please read [issue #920](https://github.com/opensourcepos/opensourcepos/issues/920) for more information.
+---
 
-- Apache server configurations are SysAdmin issues and not strictly related to OSPOS. Please make sure you can show a "Hello world" HTML page before pointing to OSPOS public directory. Make sure `.htaccess` is correctly configured.
+## Dokumentasi
 
-- If the avatar pictures are not shown in items or at item save you get an error, please make sure your `writable` and subdirs are assigned to the correct owner and the access permission is set to `750`.
+Dokumentasi API lengkap tersedia di direktori [`api_upgrade/`](api_upgrade/):
+- [`API_sekarang.md`](api_upgrade/API_sekarang.md) — Dokumentasi lengkap endpoint (Bahasa Indonesia)
+- [`API_login.md`](api_upgrade/API_login.md) — Alur autentikasi
+- [`API_penjualan.md`](api_upgrade/API_penjualan.md) — Endpoint penjualan
 
-- If you install OSPOS in Docker behind a proxy that performs `ssloffloading`, you can enable the URL generated to be HTTPS instead of HTTP, by activating the environment variable `FORCE_HTTPS = 1`.
+Dokumen proyek dan panduan kontribusi di [`conductor/`](conductor/).
 
-- If you install OSPOS behind a proxy and OSPOS constantly drops your session, consider whitelisting the proxy IP address by setting `public array $proxyIPs = [];` in the [main PHP config file](https://github.com/opensourcepos/opensourcepos/blob/master/app/Config/App.php).
+---
 
-- If you have suhosin installed and face an issue with CSRF, please make sure you read [issue #1492](https://github.com/opensourcepos/opensourcepos/issues/1492).
+## Pengembangan
 
-- PHP `≥ 8.1` is required to run this app.
+```bash
+# Jalankan test
+php vendor/bin/phpunit
 
-## 🏃 Keep the Machine Running
+# Development dengan Docker
+docker compose -f docker-compose.dev.yml up -d
+```
 
-If you like our project, please consider buying us a coffee through the button below so we can keep adding features.
+---
 
-[![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=MUN6AEG7NY6H8)\
-Or refer to the [FUNDING.yml](.github/FUNDING.yml) file.
+## Lisensi
 
-If you choose to deploy OSPOS in the cloud, you can contribute to the project by using DigitalOcean and signing up through our referral link. You'll receive a [free $200, 60-day credit](https://m.do.co/c/ac38c262507b) if you run OSPOS in a DigitalOcean droplet through [our referral link](https://m.do.co/c/ac38c262507b).
+MIT License dengan tambahan atribusi footer. Detail lengkap di [LICENSE](LICENSE).
 
-## 📄 License
+---
 
-Open Source Point of Sale is licensed under MIT terms with an important addition:
-
-The footer signature "© 2010 - _current year_ · opensourcepos.org · 3.x.x - _hash_" including the version, hash and link to our website MUST BE RETAINED, MUST BE VISIBLE IN EVERY PAGE and CANNOT BE MODIFIED.
-
-Also worth noting:
-
-_The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software._
-
-For more details please read the [LICENSE](LICENSE) file.
-
-It's important to understand that although you are free to use the application, the copyright has to stay and the license agreement applies in all cases. Therefore, any actions like:
-
-- Removing LICENSE and/or any license files is prohibited
-- Authoring the footer notice replacing it with your own or even worse claiming the copyright is absolutely prohibited
-- Claiming full ownership of the code is prohibited
-
-In short, you are free to use the application, but you cannot claim any property on it.
-
-Any person or company found breaching the license agreement might find a bunch of monkeys at the door ready to destroy their servers.
-
-## 🙏 Credits
-
-| <div align="center">DigitalOcean</div> | <div align="center">JetBrains</div> | <div align="center">Travis CI</div> |
-| --- | --- | --- |
-| <div align="center"><a href="https://www.digitalocean.com?utm_medium=opensource&utm_source=opensourcepos" target="_blank"><img src="https://github.com/user-attachments/assets/fbbf7433-ed35-407d-8946-fd03d236d350" alt="DigitalOcean Logo" height="50"></a></div> | <div align="center"><a href="https://www.jetbrains.com/idea/" target="_blank"><img src="https://github.com/opensourcepos/opensourcepos/assets/12870258/187f9bbe-4484-475c-9b58-5e5d5f931f09" alt="IntelliJ IDEA Logo" height="50"></a></div> | <div align="center"><a href="https://www.travis-ci.com/" target="_blank"><img src="https://github.com/opensourcepos/opensourcepos/assets/12870258/71cc2b44-83af-4510-a543-6358285f43c6" alt="Travis CI Logo" height="50"></a></div> |
-| Many thanks to [DigitalOcean](https://www.digitalocean.com) for providing the project with hosting credits. | Many thanks to [JetBrains](https://www.jetbrains.com/) for providing a free license of [IntelliJ IDEA](https://www.jetbrains.com/idea/) to kindly support the development of OSPOS. | Many thanks to [Travis CI](https://www.travis-ci.com/) for providing a free continuous integration service for open source projects. |
+<div align="center">
+  <sub>Built on top of <a href="https://github.com/opensourcepos/opensourcepos">opensourcepos/opensourcepos</a> · © 2010-2025</sub>
+</div>
