@@ -15,6 +15,7 @@ $routes->group('api/v1', ['namespace' => 'App\Controllers\api\v1'], static funct
     $routes->get('customers', 'Customers::index');
     $routes->post('customers', 'Customers::create');
     $routes->get('sales/payment-types', 'Sales::paymentTypes');
+    $routes->post('sales', 'Sales::create');
 });
 
 $routes->get('/', 'Login::index');
