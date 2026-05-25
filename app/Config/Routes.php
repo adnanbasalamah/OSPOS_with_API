@@ -12,6 +12,8 @@ $routes->group('api/v1', ['namespace' => 'App\Controllers\api\v1'], static funct
     $routes->post('logout', 'Auth::logout');
     $routes->get('me', 'Auth::me');
     $routes->get('items', 'Items::index');
+    $routes->get('customers', 'Customers::index');
+    $routes->post('customers', 'Customers::create');
 });
 
 $routes->get('/', 'Login::index');
