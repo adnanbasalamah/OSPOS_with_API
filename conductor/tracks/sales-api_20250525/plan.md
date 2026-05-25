@@ -2,24 +2,24 @@
 
 ## Phase 1: Items Search API
 
-- [ ] Task: Create Items API controller file and register route (GET /api/v1/items)
-    - [ ] Create `app/Controllers/api/v1/Items.php` extending ResourceController
-    - [ ] Add `$routes->get('items', 'Items::index')` inside api/v1 group
-    - [ ] Apply `jwtauth` filter to items route in Filters.php
-- [ ] Task: Write unit tests for items search
-    - [ ] Create `tests/Controllers/api/v1/ItemsTest.php`
-    - [ ] Test search by barcode (exact match)
-    - [ ] Test search by name (LIKE)
-    - [ ] Test search with category filter
-    - [ ] Test search without auth (expect 401)
-    - [ ] Run tests and confirm they fail (Red phase)
-- [ ] Task: Implement Items::index() endpoint
-    - [ ] Read `term`, `category`, `location_id`, `limit` from query params
-    - [ ] Query items with LIKE on `name` OR exact on `item_number`
-    - [ ] Filter by `deleted = 0`, `stock_type = 0`
-    - [ ] Join item_quantities for stock, suppliers for supplier_name
-    - [ ] Return JSON response with items data
-    - [ ] Run tests and confirm they pass (Green phase)
+- [x] Task: Create Items API controller file and register route (GET /api/v1/items)
+    - [x] Create `app/Controllers/api/v1/Items.php` extending ResourceController
+    - [x] Add `$routes->get('items', 'Items::index')` inside api/v1 group
+    - [x] Apply `jwtauth` filter to items route in Filters.php
+- [x] Task: Write unit tests for items search
+    - [x] Create `tests/Controllers/api/v1/ItemsTest.php`
+    - [x] Test search by barcode (exact match)
+    - [x] Test search by name (LIKE)
+    - [x] Test search with category filter
+    - [x] Test search without auth (expect 401)
+    - [x] Run tests and confirm they fail (Red phase)
+- [x] Task: Implement Items::index() endpoint [1a04c82]
+    - [x] Read `term`, `category`, `location_id`, `limit` from query params
+    - [x] Query items with LIKE on `name` OR exact on `item_number`
+    - [x] Filter by `deleted = 0`, `stock_type = 0`
+    - [x] Join item_quantities for stock, suppliers for supplier_name
+    - [x] Return JSON response with items data
+    - [x] Run tests and confirm they pass (Green phase)
 - [ ] Task: Conductor - User Manual Verification 'Items Search API' (Protocol in workflow.md)
 
 ## Phase 2: Customers API
