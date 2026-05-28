@@ -388,7 +388,9 @@ class Config extends Secure_Controller
             'derive_sale_quantity'              => $this->request->getPost('derive_sale_quantity') != null,
             'multi_pack_enabled'                => $this->request->getPost('multi_pack_enabled') != null,
             'include_hsn'                       => $this->request->getPost('include_hsn') != null,
-            'category_dropdown'                 => $this->request->getPost('category_dropdown') != null
+            'category_dropdown'                 => $this->request->getPost('category_dropdown') != null,
+            'balance_cash_initial'              => parse_decimals($this->request->getPost('balance_cash_initial')),
+            'balance_bank_initial'              => parse_decimals($this->request->getPost('balance_bank_initial'))
         ];
 
         $this->module->set_show_office_group($this->request->getPost('show_office_group') != null);

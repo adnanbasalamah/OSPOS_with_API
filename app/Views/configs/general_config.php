@@ -453,6 +453,33 @@
                 </div>
             </div>
 
+            <hr>
+            <h4><?= lang('Config.financial_initial_balances') ?></h4>
+
+            <div class="form-group form-group-sm">
+                <?= form_label(lang('Config.balance_cash_initial'), 'balance_cash_initial', ['class' => 'control-label col-xs-2 required']) ?>
+                <div class="col-xs-2">
+                    <?= form_input([
+                        'name'  => 'balance_cash_initial',
+                        'id'    => 'balance_cash_initial',
+                        'class' => 'form-control input-sm',
+                        'value' => $config['balance_cash_initial']
+                    ]) ?>
+                </div>
+            </div>
+
+            <div class="form-group form-group-sm">
+                <?= form_label(lang('Config.balance_bank_initial'), 'balance_bank_initial', ['class' => 'control-label col-xs-2 required']) ?>
+                <div class="col-xs-2">
+                    <?= form_input([
+                        'name'  => 'balance_bank_initial',
+                        'id'    => 'balance_bank_initial',
+                        'class' => 'form-control input-sm',
+                        'value' => $config['balance_bank_initial']
+                    ]) ?>
+                </div>
+            </div>
+
             <?= form_submit([
                 'name'  => 'submit_general',
                 'id'    => 'submit_general',
