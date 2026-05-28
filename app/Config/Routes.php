@@ -12,11 +12,23 @@ $routes->group('api/v1', ['namespace' => 'App\Controllers\api\v1'], static funct
     $routes->post('logout', 'Auth::logout');
     $routes->get('me', 'Auth::me');
     $routes->get('items', 'Items::index');
+    $routes->post('items', 'Items::create');
     $routes->get('customers', 'Customers::index');
     $routes->post('customers', 'Customers::create');
+    $routes->get('customers/(:num)', 'Customers::show/$1');
+    $routes->get('categories', 'Categories::index');
+    $routes->get('suppliers', 'Suppliers::index');
     $routes->get('sales/payment-types', 'Sales::paymentTypes');
     $routes->post('sales', 'Sales::create');
     $routes->get('sales/(:num)', 'Sales::show/$1');
+    $routes->get('stock/by-sku/(:segment)', 'Stock::bySku/$1');
+    $routes->get('stock/out-of-stock', 'Stock::outOfStock');
+    $routes->get('stock/below-minimum', 'Stock::belowMinimum');
+    $routes->patch('stock/update/(:segment)', 'Stock::update/$1');
+    $routes->get('receivings', 'Receivings::index');
+    $routes->get('receivings/items', 'Receivings::items');
+    $routes->get('receivings/stock-locations', 'Receivings::stockLocations');
+    $routes->post('receivings', 'Receivings::complete');
 });
 
 $routes->get('/', 'Login::index');
@@ -25,6 +37,10 @@ $routes->post('login', 'Login::index');
 
 $routes->add('no_access/index/(:segment)', 'No_access::index/$1');
 $routes->add('no_access/index/(:segment)/(:segment)', 'No_access::index/$1/$2');
+
+$routes->add('reports/profit_loss', 'Reports::profit_loss_input');
+$routes->add('reports/profit_loss/(:any)/(:any)', 'Reports::profit_loss/$1/$2');
+$routes->add('reports/profit_loss/(:any)/(:any)/(:any)/(:any)/(:any)', 'Reports::profit_loss/$1/$2');
 
 $routes->add('reports/summary_(:any)/(:any)/(:any)', 'Reports::Summary_$1/$2/$3/$4');
 $routes->add('reports/summary_expenses_categories', 'Reports::date_input_only');

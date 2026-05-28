@@ -23,10 +23,10 @@ hasil -> API_skrg_pakai_login.md
 Saya ingin membuat API agar proses penjualan dapat dijalankan di HP android.
 Buatkan Dokumentasi API ini yang disimpan di api_upgrade/API_penjualan.md
 Dokumentasi ini akan digunakan utk proses development API di server dan pembuatan Aplikasi Android.
+Source code server eksisting ialah yg skrg ada di /var/www/kasirbaru
 
- 
 Mula2 Tuliskan API apa saja yg diperlukan, 
-kemudian Tuliskan urutan pemanggilan API ketika terjadi penjualan sampai penjualan selesai
+kemudian Tuliskan urutan pemanggilan API ketika terjadi penjualan sampai penjualan selesai, mulai login sampai dengan logout
 
 Tuliskan juga bagaimana format pemanggilannya, output nya ketika benar dan salah
 utk mengakses API ini user harus login dulu.
@@ -37,4 +37,8 @@ Gunakan format laporan sebagai berikut untuk setiap API yang ada
 2. cara pemanggilannya secara lengkap beserta contoh datanya yg siap dicopy paste lalu dijalankan di curl
 3. output nya ketika benar
 4. pesan error nya ketika salah
+
+hasil -> api_upgrade/API_penjualan.md
+----------------------------
+
 

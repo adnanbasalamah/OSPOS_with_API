@@ -83,7 +83,7 @@ class Filters extends BaseFilters
 
     public array $filters = [
         'cors' => ['before' => ['api/v1/*']],
-        'jwtauth' => ['before' => ['api/v1/logout', 'api/v1/me', 'api/v1/items', 'api/v1/customers', 'api/v1/sales', 'api/v1/sales/payment-types', 'api/v1/sales/*']],
+        'jwtauth' => ['before' => ['api/v1/logout', 'api/v1/me', 'api/v1/items', 'api/v1/customers', 'api/v1/customers/*', 'api/v1/sales', 'api/v1/sales/payment-types', 'api/v1/sales/*', 'api/v1/suppliers', 'api/v1/categories', 'api/v1/stock/by-sku/*', 'api/v1/stock/out-of-stock', 'api/v1/stock/below-minimum', 'api/v1/stock/update/*', 'api/v1/receivings', 'api/v1/receivings/items', 'api/v1/receivings/stock-locations', 'api/v1/receivings/*']],
     ];
 
     /**

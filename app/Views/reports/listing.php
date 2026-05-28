@@ -35,7 +35,7 @@ if (isset($error)) {
             </div>
             <div class="list-group">
                 <?php foreach ($permission_ids as $permission_id) {
-                    if (can_show_report($permission_id, ['inventory', 'receiving'])) {
+                    if (can_show_report($permission_id, ['inventory', 'receiving', 'profit_loss'])) {
                         $link = get_report_link($permission_id, 'graphical_summary');
                 ?>
                         <a class="list-group-item" href="<?= $link['path'] ?>"><?= $link['label'] ?></a>
@@ -54,7 +54,7 @@ if (isset($error)) {
             </div>
             <div class="list-group">
                 <?php foreach ($permission_ids as $permission_id) {
-                    if (can_show_report($permission_id, ['inventory', 'receiving'])) {
+                    if (can_show_report($permission_id, ['inventory', 'receiving', 'profit_loss'])) {
                         $link = get_report_link($permission_id, 'summary');
                 ?>
                         <a class="list-group-item" href="<?= $link['path'] ?>"><?= $link['label'] ?></a>
@@ -96,6 +96,19 @@ if (isset($error)) {
                     ?>
                     <a class="list-group-item" href="<?= $inventory_low_report['path'] ?>"><?= $inventory_low_report['label'] ?></a>
                     <a class="list-group-item" href="<?= $inventory_summary_report['path'] ?>"><?= $inventory_summary_report['label'] ?></a>
+                </div>
+            </div>
+        <?php } ?>
+        <?php if (in_array('reports_profit_loss', $permission_ids, true)) { ?>
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><span class="glyphicon glyphicon-usd">&nbsp;</span><?= lang('Reports.profit_loss') ?></h3>
+                </div>
+                <div class="list-group">
+                    <?php
+                    $profit_loss_report = get_report_link('reports_profit_loss');
+                    ?>
+                    <a class="list-group-item" href="<?= $profit_loss_report['path'] ?>"><?= $profit_loss_report['label'] ?></a>
                 </div>
             </div>
         <?php } ?>

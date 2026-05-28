@@ -25,6 +25,7 @@ use App\Models\Reports\Summary_sales;
 use App\Models\Reports\Summary_sales_taxes;
 use App\Models\Reports\Summary_suppliers;
 use App\Models\Reports\Summary_taxes;
+use App\Models\Reports\Profit_loss;
 use Config\OSPOS;
 use Config\Services;
 
@@ -49,6 +50,7 @@ class Reports extends Secure_Controller
     private Supplier $supplier;
     private Detailed_receivings $detailed_receivings;
     private Inventory_summary $inventory_summary;
+    private Profit_loss $profit_loss;
 
     public function __construct()
     {
@@ -76,11 +78,16 @@ class Reports extends Secure_Controller
         $this->supplier = model(Supplier::class);
         $this->detailed_receivings = model(Detailed_receivings::class);
         $this->inventory_summary = model(Inventory_summary::class);
+        $this->profit_loss = model(Profit_loss::class);
 
         if (sizeof($exploder) > 1) {
             preg_match('/(?:inventory)|([^_.]*)(?:_graph|_row)?$/', $method_name, $matches);
             preg_match('/^(.*?)([sy])?$/', array_pop($matches), $matches);
             $submodule_id = $matches[1] . ((count($matches) > 2) ? $matches[2] : 's');
+
+            if ($method_name === 'profit_loss' || $method_name === 'summary_profit_loss') {
+                $submodule_id = 'profit_loss';
+            }
 
             // Check access to report submodule
             if (!$this->employee->has_grant('reports_' . $submodule_id, $this->employee->get_logged_in_employee_info()->person_id)) {
@@ -2089,6 +2096,33 @@ class Reports extends Secure_Controller
         ];
 
         echo view('reports/tabular', $data);
+    }
+
+    public function profit_loss_input(): void
+    {
+        $this->clearCache();
+
+        echo view('reports/profit_loss_input');
+    }
+
+    public function profit_loss(string $start_date, string $end_date): void
+    {
+        $this->clearCache();
+
+        $inputs = [
+            'start_date' => $start_date,
+            'end_date'   => $end_date
+        ];
+
+        $report_data = $this->profit_loss->getData($inputs);
+
+        $data = [
+            'title'        => lang('Reports.profit_loss_report'),
+            'subtitle'     => $this->_get_subtitle_report($inputs),
+            'report_data'  => $report_data
+        ];
+
+        echo view('reports/profit_loss', $data);
     }
 
     /**

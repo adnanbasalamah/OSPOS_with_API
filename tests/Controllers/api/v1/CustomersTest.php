@@ -6,26 +6,12 @@ namespace Controllers\api\v1;
 
 use CodeIgniter\Test\CIUnitTestCase;
 use CodeIgniter\Test\FeatureTestTrait;
-use Firebase\JWT\JWT;
+use Tests\Support\JWTTokenTrait;
 
 class CustomersTest extends CIUnitTestCase
 {
     use FeatureTestTrait;
-
-    private const JWT_SECRET = 'kasirbaru_jwt_secret_change_this_to_a_random_64_char_string';
-
-    private function generateToken(): string
-    {
-        $payload = [
-            'iss' => 'kasirbaru',
-            'iat' => time(),
-            'exp' => time() + 3600,
-            'sub' => 1,
-            'username' => 'admin',
-        ];
-
-        return JWT::encode($payload, self::JWT_SECRET, 'HS256');
-    }
+    use JWTTokenTrait;
 
     public function testCustomersWithoutTokenReturns401(): void
     {

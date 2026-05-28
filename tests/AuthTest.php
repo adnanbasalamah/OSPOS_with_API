@@ -3,10 +3,11 @@
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 use PHPUnit\Framework\TestCase;
+use Tests\Support\JWTTokenTrait;
 
 class AuthTest extends TestCase
 {
-    private const JWT_SECRET = 'kasirbaru_jwt_secret_change_this_to_a_random_64_char_string';
+    use JWTTokenTrait;
 
     public function testJwtTokenGenerationAndValidation(): void
     {
@@ -18,11 +19,11 @@ class AuthTest extends TestCase
             'username' => 'admin',
         ];
 
-        $token = JWT::encode($payload, self::JWT_SECRET, 'HS256');
+        $token = JWT::encode($payload, $this->getJwtSecret(), 'HS256');
         $this->assertNotEmpty($token);
         $this->assertIsString($token);
 
-        $decoded = JWT::decode($token, new Key(self::JWT_SECRET, 'HS256'));
+        $decoded = JWT::decode($token, new Key($this->getJwtSecret(), 'HS256'));
         $this->assertEquals(1, $decoded->sub);
         $this->assertEquals('admin', $decoded->username);
         $this->assertEquals('kasirbaru', $decoded->iss);
@@ -37,10 +38,10 @@ class AuthTest extends TestCase
             'sub' => 1,
         ];
 
-        $token = JWT::encode($payload, self::JWT_SECRET, 'HS256');
+        $token = JWT::encode($payload, $this->getJwtSecret(), 'HS256');
 
         $this->expectException(\Firebase\JWT\ExpiredException::class);
-        JWT::decode($token, new Key(self::JWT_SECRET, 'HS256'));
+        JWT::decode($token, new Key($this->getJwtSecret(), 'HS256'));
     }
 
     public function testJwtInvalidSignatureRejected(): void
@@ -55,7 +56,7 @@ class AuthTest extends TestCase
         $token = JWT::encode($payload, 'wrong_secret_key_that_is_different_and_long_enough', 'HS256');
 
         $this->expectException(\Firebase\JWT\SignatureInvalidException::class);
-        JWT::decode($token, new Key(self::JWT_SECRET, 'HS256'));
+        JWT::decode($token, new Key($this->getJwtSecret(), 'HS256'));
     }
 
     public function testTokenBlacklistHashIsDeterministic(): void
@@ -84,8 +85,8 @@ class AuthTest extends TestCase
             'username' => 'testuser',
         ];
 
-        $token = JWT::encode($payload, self::JWT_SECRET, 'HS256');
-        $decoded = JWT::decode($token, new Key(self::JWT_SECRET, 'HS256'));
+        $token = JWT::encode($payload, $this->getJwtSecret(), 'HS256');
+        $decoded = JWT::decode($token, new Key($this->getJwtSecret(), 'HS256'));
 
         $this->assertObjectHasProperty('iss', $decoded);
         $this->assertObjectHasProperty('iat', $decoded);
@@ -106,25 +107,25 @@ class AuthTest extends TestCase
             'sub' => 1,
         ];
 
-        $token = JWT::encode($payload, self::JWT_SECRET, 'HS256');
+        $token = JWT::encode($payload, $this->getJwtSecret(), 'HS256');
         $parts = explode('.', $token);
         $tamperedPayload = rtrim(base64url_encode(json_encode(['sub' => 999])), '=');
         $fakeToken = $parts[0] . '.' . $tamperedPayload . '.' . $parts[2];
 
         $this->expectException(\Firebase\JWT\SignatureInvalidException::class);
-        JWT::decode($fakeToken, new Key(self::JWT_SECRET, 'HS256'));
+        JWT::decode($fakeToken, new Key($this->getJwtSecret(), 'HS256'));
     }
 
     public function testJwtRejectsMalformedToken(): void
     {
         $this->expectException(\DomainException::class);
-        JWT::decode('not.a.token', new Key(self::JWT_SECRET, 'HS256'));
+        JWT::decode('not.a.token', new Key($this->getJwtSecret(), 'HS256'));
     }
 
     public function testJwtRejectsEmptyToken(): void
     {
         $this->expectException(\UnexpectedValueException::class);
-        JWT::decode('', new Key(self::JWT_SECRET, 'HS256'));
+        JWT::decode('', new Key($this->getJwtSecret(), 'HS256'));
     }
 }
 
