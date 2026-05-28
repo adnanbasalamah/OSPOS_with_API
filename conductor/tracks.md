@@ -10,12 +10,7 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [x] **Track: Port REST API from Old System**
-*Link: [./tracks/port-rest-api_20250525/](./tracks/port-rest-api_20250525/)*
-
----
-
-- [ ] **Track: Laporan Rugi Laba (Profit & Loss Report)**
+- [x] **Track: Laporan Rugi Laba (Profit & Loss Report)**
 *Link: [./tracks/profit-loss-report_20260528/](./tracks/profit-loss-report_20260528/)*
 
 
