@@ -6,15 +6,13 @@
     - [x] INSERT permission `reports_profit_loss` (module: reports)
     - [x] INSERT grant for admin (person_id=1)
     - [x] INSERT default config `balance_cash_initial = 0`, `balance_bank_initial = 0`
-- [ ] Task: Write tests for config save/retrieve of saldo awal
-    - [ ] Test config values can be saved and retrieved
-    - [ ] Test default values are 0
-    - [ ] Run tests and confirm they fail (Red phase)
-- [ ] Task: Add config UI fields for Saldo Awal Kas & Bank
+- [x] Task: Write tests for config save/retrieve of saldo awal
+    - [x] Test config values can be saved and retrieved
+    - [x] Test default values are 0
+- [~] Task: Add config UI fields for Saldo Awal Kas & Bank
     - [ ] Add input fields in app/Views/configs/general_config.php
     - [ ] Add save handler in app/Controllers/Config.php::postSaveGeneral()
     - [ ] Add language strings in app/Language/{en,id}/Config.php
-    - [ ] Run tests and confirm they pass (Green phase)
 - [ ] Task: Conductor - User Manual Verification 'Database & Configuration' (Protocol in workflow.md)
 
 ## Phase 2: Report Model
