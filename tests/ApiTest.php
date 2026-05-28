@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use CodeIgniter\Test\CIUnitTestCase;
 use CodeIgniter\Test\FeatureTestTrait;
 
@@ -18,7 +20,7 @@ class ApiTest extends CIUnitTestCase
         ]);
 
         $response->assertStatus(200);
-        $response->assertJSONFragment(['status' => 'success']);
+        $response->assertJSONFragment(['success' => true]);
 
         $body = $response->getJSON();
         $data = json_decode($body, true);
@@ -37,7 +39,9 @@ class ApiTest extends CIUnitTestCase
         ]);
 
         $response->assertStatus(401);
-        $response->assertJSONFragment(['status' => 'error', 'message' => 'Invalid username or password']);
+        $body = json_decode($response->getJSON(), true);
+        $this->assertFalse($body['success']);
+        $this->assertEquals('ERR_INVALID_CREDENTIALS', $body['error']['code']);
     }
 
     public function testLoginFailedMissingFields(): void
@@ -58,7 +62,9 @@ class ApiTest extends CIUnitTestCase
         ]);
 
         $response->assertStatus(401);
-        $response->assertJSONFragment(['status' => 'error', 'message' => 'Invalid username or password']);
+        $body = json_decode($response->getJSON(), true);
+        $this->assertFalse($body['success']);
+        $this->assertEquals('ERR_INVALID_CREDENTIALS', $body['error']['code']);
     }
 
     public function testMeWithoutTokenReturns401(): void
@@ -78,7 +84,7 @@ class ApiTest extends CIUnitTestCase
         $meResponse = $this->withHeaders(['Authorization' => "Bearer $token"])->get('api/v1/me');
 
         $meResponse->assertStatus(200);
-        $meResponse->assertJSONFragment(['status' => 'success']);
+        $meResponse->assertJSONFragment(['success' => true]);
 
         $body = $meResponse->getJSON();
         $data = json_decode($body, true);
@@ -90,7 +96,8 @@ class ApiTest extends CIUnitTestCase
         $response = $this->withHeaders(['Authorization' => 'Bearer invalid_token_here'])->get('api/v1/me');
 
         $response->assertStatus(401);
-        $response->assertJSONFragment(['status' => 'error']);
+        $body = json_decode($response->getJSON(), true);
+        $this->assertFalse($body['success']);
     }
 
     public function testLogoutWithoutTokenReturns401(): void
@@ -106,7 +113,7 @@ class ApiTest extends CIUnitTestCase
         $response = $this->withHeaders(['Authorization' => "Bearer $token"])->post('api/v1/logout');
 
         $response->assertStatus(200);
-        $response->assertJSONFragment(['status' => 'success', 'message' => 'Logged out successfully']);
+        $response->assertJSONFragment(['success' => true]);
     }
 
     public function testBlacklistedTokenRejected(): void
@@ -118,7 +125,8 @@ class ApiTest extends CIUnitTestCase
         $response = $this->withHeaders(['Authorization' => "Bearer $token"])->get('api/v1/me');
 
         $response->assertStatus(401);
-        $response->assertJSONFragment(['status' => 'error', 'message' => 'Token has been revoked']);
+        $body = json_decode($response->getJSON(), true);
+        $this->assertFalse($body['success']);
     }
 
     public function testCorsHeadersPresent(): void

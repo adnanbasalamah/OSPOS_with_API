@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Filters;
 
 use App\Models\TokenBlacklist;
@@ -16,10 +18,10 @@ class JWTAuth implements FilterInterface
     {
         $authHeader = $request->getHeaderLine('Authorization');
 
-        if (empty($authHeader) || !str_starts_with($authHeader, 'Bearer ')) {
+        if (empty($authHeader) || strpos($authHeader, 'Bearer ') !== 0) {
             return service('response')
                 ->setStatusCode(401)
-                ->setJSON(['status' => 'error', 'message' => 'Missing or invalid authorization header']);
+                ->setJSON(['success' => false, 'error' => ['code' => 'ERR_MISSING_TOKEN', 'message' => 'Missing or invalid authorization header']]);
         }
 
         $token = substr($authHeader, 7);
@@ -30,7 +32,7 @@ class JWTAuth implements FilterInterface
         } catch (\Exception $e) {
             return service('response')
                 ->setStatusCode(401)
-                ->setJSON(['status' => 'error', 'message' => 'Invalid or expired token']);
+                ->setJSON(['success' => false, 'error' => ['code' => 'ERR_INVALID_TOKEN', 'message' => 'Invalid or expired token']]);
         }
 
         try {
@@ -38,7 +40,7 @@ class JWTAuth implements FilterInterface
             if ($blacklist->isBlacklisted($token)) {
                 return service('response')
                     ->setStatusCode(401)
-                    ->setJSON(['status' => 'error', 'message' => 'Token has been revoked']);
+                    ->setJSON(['success' => false, 'error' => ['code' => 'ERR_TOKEN_REVOKED', 'message' => 'Token has been revoked']]);
             }
         } catch (\Exception $e) {
             log_message('error', 'Blacklist check failed: ' . $e->getMessage());

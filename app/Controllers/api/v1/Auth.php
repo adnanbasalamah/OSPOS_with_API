@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controllers\api\v1;
 
 use App\Models\Employee;
@@ -20,7 +22,15 @@ class Auth extends ResourceController
         ];
 
         if (!$this->validate($rules)) {
-            return $this->failValidationErrors($this->validator->getErrors());
+            return $this->response
+                ->setJSON([
+                    'success' => false,
+                    'error' => [
+                        'code' => 'ERR_VALIDATION_FAILED',
+                        'message' => 'Username and password are required.',
+                    ],
+                ])
+                ->setStatusCode(400);
         }
 
         $username = $this->request->getVar('username');
@@ -31,7 +41,15 @@ class Auth extends ResourceController
         $query = $builder->getWhere(['username' => $username, 'deleted' => 0], 1);
 
         if ($query->getNumRows() !== 1) {
-            return $this->respond(['status' => 'error', 'message' => 'Invalid username or password'], 401);
+            return $this->response
+                ->setJSON([
+                    'success' => false,
+                    'error' => [
+                        'code' => 'ERR_INVALID_CREDENTIALS',
+                        'message' => 'Invalid username or password.',
+                    ],
+                ])
+                ->setStatusCode(401);
         }
 
         $row = $query->getRow();
@@ -48,7 +66,15 @@ class Auth extends ResourceController
         }
 
         if (!$valid) {
-            return $this->respond(['status' => 'error', 'message' => 'Invalid username or password'], 401);
+            return $this->response
+                ->setJSON([
+                    'success' => false,
+                    'error' => [
+                        'code' => 'ERR_INVALID_CREDENTIALS',
+                        'message' => 'Invalid username or password.',
+                    ],
+                ])
+                ->setStatusCode(401);
         }
 
         $apiConfig = config(API::class);
@@ -63,25 +89,35 @@ class Auth extends ResourceController
 
         $token = JWT::encode($payload, $apiConfig->jwt_secret, $apiConfig->jwt_algorithm);
 
-        return $this->respond([
-            'status' => 'success',
-            'data' => [
-                'token' => $token,
-                'expires_in' => $apiConfig->jwt_expiry,
-                'user' => [
-                    'id' => (int) $row->person_id,
-                    'username' => $row->username,
+        return $this->response
+            ->setJSON([
+                'success' => true,
+                'data' => [
+                    'token' => $token,
+                    'expires_in' => $apiConfig->jwt_expiry,
+                    'user' => [
+                        'id' => (int) $row->person_id,
+                        'username' => $row->username,
+                    ],
                 ],
-            ],
-        ]);
+            ])
+            ->setStatusCode(200);
     }
 
     public function logout(): ResponseInterface
     {
         $authHeader = $this->request->getHeaderLine('Authorization');
 
-        if (empty($authHeader) || !str_starts_with($authHeader, 'Bearer ')) {
-            return $this->respond(['status' => 'error', 'message' => 'Missing or invalid authorization header'], 401);
+        if (empty($authHeader) || strpos($authHeader, 'Bearer ') !== 0) {
+            return $this->response
+                ->setJSON([
+                    'success' => false,
+                    'error' => [
+                        'code' => 'ERR_MISSING_TOKEN',
+                        'message' => 'Missing or invalid authorization header.',
+                    ],
+                ])
+                ->setStatusCode(401);
         }
 
         $token = substr($authHeader, 7);
@@ -93,12 +129,24 @@ class Auth extends ResourceController
             $blacklist = model(TokenBlacklist::class);
             $blacklist->blacklist($token, $decoded->exp);
 
-            return $this->respond([
-                'status' => 'success',
-                'message' => 'Logged out successfully',
-            ]);
+            return $this->response
+                ->setJSON([
+                    'success' => true,
+                    'data' => [
+                        'message' => 'Logged out successfully.',
+                    ],
+                ])
+                ->setStatusCode(200);
         } catch (\Exception $e) {
-            return $this->respond(['status' => 'error', 'message' => 'Invalid or expired token'], 401);
+            return $this->response
+                ->setJSON([
+                    'success' => false,
+                    'error' => [
+                        'code' => 'ERR_INVALID_TOKEN',
+                        'message' => 'Invalid or expired token.',
+                    ],
+                ])
+                ->setStatusCode(401);
         }
     }
 
@@ -108,24 +156,42 @@ class Auth extends ResourceController
         $username = $this->request->getHeaderLine('X-User-Name');
 
         if (empty($userId)) {
-            return $this->respond(['status' => 'error', 'message' => 'Authentication required'], 401);
+            return $this->response
+                ->setJSON([
+                    'success' => false,
+                    'error' => [
+                        'code' => 'ERR_AUTH_REQUIRED',
+                        'message' => 'Authentication required.',
+                    ],
+                ])
+                ->setStatusCode(401);
         }
 
         $employee = model(Employee::class);
         $info = $employee->get_info((int) $userId);
 
         if (!$info) {
-            return $this->failNotFound('User not found');
+            return $this->response
+                ->setJSON([
+                    'success' => false,
+                    'error' => [
+                        'code' => 'ERR_USER_NOT_FOUND',
+                        'message' => 'User not found.',
+                    ],
+                ])
+                ->setStatusCode(404);
         }
 
-        return $this->respond([
-            'status' => 'success',
-            'data' => [
-                'id' => (int) $info->person_id,
-                'username' => $username,
-                'email' => $info->email ?? '',
-                'person_id' => (int) $info->person_id,
-            ],
-        ]);
+        return $this->response
+            ->setJSON([
+                'success' => true,
+                'data' => [
+                    'id' => (int) $info->person_id,
+                    'username' => $username,
+                    'email' => $info->email ?? '',
+                    'person_id' => (int) $info->person_id,
+                ],
+            ])
+            ->setStatusCode(200);
     }
 }

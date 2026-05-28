@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controllers\api\v1;
 
 use App\Libraries\Sale_lib;
@@ -32,10 +34,12 @@ class Sales extends ResourceController
             ];
         }
 
-        return $this->respond([
-            'status' => 'success',
-            'data' => $result,
-        ]);
+        return $this->response
+            ->setJSON([
+                'success' => true,
+                'data' => $result,
+            ])
+            ->setStatusCode(200);
     }
 
     public function create(): ResponseInterface
@@ -43,17 +47,27 @@ class Sales extends ResourceController
         $input = $this->request->getJSON(true) ?? $this->request->getPost() ?? [];
 
         if (empty($input['items']) || !is_array($input['items'])) {
-            return $this->respond([
-                'status' => 'error',
-                'message' => 'Item penjualan wajib diisi.',
-            ], 400);
+            return $this->response
+                ->setJSON([
+                    'success' => false,
+                    'error' => [
+                        'code' => 'ERR_VALIDATION_FAILED',
+                        'message' => 'Item penjualan wajib diisi.',
+                    ],
+                ])
+                ->setStatusCode(400);
         }
 
         if (empty($input['payments']) || !is_array($input['payments'])) {
-            return $this->respond([
-                'status' => 'error',
-                'message' => 'Pembayaran wajib diisi.',
-            ], 400);
+            return $this->response
+                ->setJSON([
+                    'success' => false,
+                    'error' => [
+                        'code' => 'ERR_VALIDATION_FAILED',
+                        'message' => 'Pembayaran wajib diisi.',
+                    ],
+                ])
+                ->setStatusCode(400);
         }
 
         $locationId = (int)($input['sale_location'] ?? 1);
@@ -72,18 +86,28 @@ class Sales extends ResourceController
             $quantity = (float)($itemInput['quantity'] ?? 0);
 
             if ($itemId <= 0 || $quantity <= 0) {
-                return $this->respond([
-                    'status' => 'error',
-                    'message' => 'Item #' . ($i + 1) . ': item_id dan quantity wajib valid.',
-                ], 400);
+                return $this->response
+                    ->setJSON([
+                        'success' => false,
+                        'error' => [
+                            'code' => 'ERR_VALIDATION_FAILED',
+                            'message' => 'Item #' . ($i + 1) . ': item_id dan quantity wajib valid.',
+                        ],
+                    ])
+                    ->setStatusCode(400);
             }
 
             $itemInfo = $itemModel->get_info($itemId);
             if (empty($itemInfo) || !isset($itemInfo->item_id)) {
-                return $this->respond([
-                    'status' => 'error',
-                    'message' => 'Item #' . ($i + 1) . ' (ID: ' . $itemId . ') tidak ditemukan.',
-                ], 400);
+                return $this->response
+                    ->setJSON([
+                        'success' => false,
+                        'error' => [
+                            'code' => 'ERR_ITEM_NOT_FOUND',
+                            'message' => 'Item #' . ($i + 1) . ' (ID: ' . $itemId . ') tidak ditemukan.',
+                        ],
+                    ])
+                    ->setStatusCode(400);
             }
 
             if ($itemInfo->stock_type == HAS_STOCK) {
@@ -120,22 +144,32 @@ class Sales extends ResourceController
         }
 
         if (!empty($outOfStock)) {
-            return $this->respond([
-                'status' => 'error',
-                'message' => 'Stok tidak mencukupi untuk beberapa item.',
-                'data' => [
-                    'out_of_stock' => $outOfStock,
-                ],
-            ], 400);
+            return $this->response
+                ->setJSON([
+                    'success' => false,
+                    'error' => [
+                        'code' => 'ERR_OUT_OF_STOCK',
+                        'message' => 'Stok tidak mencukupi untuk beberapa item.',
+                    ],
+                    'data' => [
+                        'out_of_stock' => $outOfStock,
+                    ],
+                ])
+                ->setStatusCode(400);
         }
 
         $payments = [];
         foreach ($input['payments'] as $paymentInput) {
             if (empty($paymentInput['payment_type']) || !isset($paymentInput['payment_amount'])) {
-                return $this->respond([
-                    'status' => 'error',
-                    'message' => 'Setiap pembayaran harus memiliki payment_type dan payment_amount.',
-                ], 400);
+                return $this->response
+                    ->setJSON([
+                        'success' => false,
+                        'error' => [
+                            'code' => 'ERR_VALIDATION_FAILED',
+                            'message' => 'Setiap pembayaran harus memiliki payment_type dan payment_amount.',
+                        ],
+                    ])
+                    ->setStatusCode(400);
             }
 
             $payments[] = [
@@ -147,7 +181,7 @@ class Sales extends ResourceController
         }
 
         $saleModel = model(Sale::class);
-        $saleStatus = COMPLETED;
+        $saleStatus = (string)COMPLETED;
         $salesTaxes = [[], []];
         $saleId = $saleModel->save_value(
             NEW_ENTRY,
@@ -166,10 +200,15 @@ class Sales extends ResourceController
         );
 
         if ($saleId <= 0) {
-            return $this->respond([
-                'status' => 'error',
-                'message' => 'Gagal menyimpan transaksi penjualan.',
-            ], 500);
+            return $this->response
+                ->setJSON([
+                    'success' => false,
+                    'error' => [
+                        'code' => 'ERR_SAVE_FAILED',
+                        'message' => 'Gagal menyimpan transaksi penjualan.',
+                    ],
+                ])
+                ->setStatusCode(500);
         }
 
         $total = 0;
@@ -188,17 +227,19 @@ class Sales extends ResourceController
             $paymentTotal += (float)$payment['payment_amount'] - (float)$payment['cash_refund'];
         }
 
-        return $this->respond([
-            'status' => 'success',
-            'data' => [
-                'sale_id' => $saleId,
-                'sale_id_display' => 'POS ' . $saleId,
-                'sale_time' => date('Y-m-d H:i:s'),
-                'total' => round($total, 2),
-                'amount_due' => round(max(0, $total - $paymentTotal), 2),
-                'item_count' => count($items),
-            ],
-        ], 201);
+        return $this->response
+            ->setJSON([
+                'success' => true,
+                'data' => [
+                    'sale_id' => $saleId,
+                    'sale_id_display' => 'POS ' . $saleId,
+                    'sale_time' => date('Y-m-d H:i:s'),
+                    'total' => round($total, 2),
+                    'amount_due' => round(max(0, $total - $paymentTotal), 2),
+                    'item_count' => count($items),
+                ],
+            ])
+            ->setStatusCode(201);
     }
 
     public function show($id = null): ResponseInterface
@@ -207,10 +248,15 @@ class Sales extends ResourceController
         $saleInfo = $saleModel->get_info((int)$id)->getRow();
 
         if (empty($saleInfo) || !isset($saleInfo->sale_id)) {
-            return $this->respond([
-                'status' => 'error',
-                'message' => 'Transaksi penjualan tidak ditemukan.',
-            ], 404);
+            return $this->response
+                ->setJSON([
+                    'success' => false,
+                    'error' => [
+                        'code' => 'ERR_SALE_NOT_FOUND',
+                        'message' => 'Transaksi penjualan tidak ditemukan.',
+                    ],
+                ])
+                ->setStatusCode(404);
         }
 
         $customerModel = model(Customer::class);
@@ -257,26 +303,28 @@ class Sales extends ResourceController
         }
         $total = round($total, 2);
 
-        return $this->respond([
-            'status' => 'success',
-            'data' => [
-                'sale_id' => (int)$saleInfo->sale_id,
-                'sale_id_display' => 'POS ' . $saleInfo->sale_id,
-                'sale_time' => $saleInfo->sale_time ?? '',
-                'customer' => [
-                    'person_id' => (int)$saleInfo->customer_id,
-                    'name' => trim(($customerInfo->first_name ?? '') . ' ' . ($customerInfo->last_name ?? '')),
-                    'phone_number' => $customerInfo->phone_number ?? '',
+        return $this->response
+            ->setJSON([
+                'success' => true,
+                'data' => [
+                    'sale_id' => (int)$saleInfo->sale_id,
+                    'sale_id_display' => 'POS ' . $saleInfo->sale_id,
+                    'sale_time' => $saleInfo->sale_time ?? '',
+                    'customer' => [
+                        'person_id' => (int)$saleInfo->customer_id,
+                        'name' => trim(($customerInfo->first_name ?? '') . ' ' . ($customerInfo->last_name ?? '')),
+                        'phone_number' => $customerInfo->phone_number ?? '',
+                    ],
+                    'employee' => [
+                        'person_id' => (int)$saleInfo->employee_id,
+                        'name' => trim(($employeeInfo->first_name ?? '') . ' ' . ($employeeInfo->last_name ?? '')),
+                    ],
+                    'items' => $items,
+                    'payments' => $payments,
+                    'total' => $total,
+                    'comment' => $saleInfo->comment ?? '',
                 ],
-                'employee' => [
-                    'person_id' => (int)$saleInfo->employee_id,
-                    'name' => trim(($employeeInfo->first_name ?? '') . ' ' . ($employeeInfo->last_name ?? '')),
-                ],
-                'items' => $items,
-                'payments' => $payments,
-                'total' => $total,
-                'comment' => $saleInfo->comment ?? '',
-            ],
-        ]);
+            ])
+            ->setStatusCode(200);
     }
 }

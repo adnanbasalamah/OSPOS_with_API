@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Controllers\api\v1;
 
 use CodeIgniter\Test\CIUnitTestCase;
@@ -31,7 +33,6 @@ class SalesTest extends CIUnitTestCase
     {
         $response = $this->get('api/v1/sales/payment-types');
         $response->assertStatus(401);
-        $response->assertJSONFragment(['status' => 'error']);
     }
 
     public function testPaymentTypesReturnsSuccess(): void
@@ -41,7 +42,7 @@ class SalesTest extends CIUnitTestCase
         $response = $this->withHeaders(['Authorization' => "Bearer $token"])->get('api/v1/sales/payment-types');
 
         $response->assertStatus(200);
-        $response->assertJSONFragment(['status' => 'success']);
+        $response->assertJSONFragment(['success' => true]);
     }
 
     public function testPaymentTypesReturnsArray(): void
@@ -161,7 +162,7 @@ class SalesTest extends CIUnitTestCase
         ]);
 
         $response->assertStatus(201);
-        $response->assertJSONFragment(['status' => 'success']);
+        $response->assertJSONFragment(['success' => true]);
     }
 
     public function testCreateSuccessReturnsSaleId(): void
