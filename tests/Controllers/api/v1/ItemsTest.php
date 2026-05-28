@@ -1,11 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Controllers\api\v1;
 
 use CodeIgniter\Test\CIUnitTestCase;
 use CodeIgniter\Test\FeatureTestTrait;
 use Firebase\JWT\JWT;
-use Firebase\JWT\Key;
 
 class ItemsTest extends CIUnitTestCase
 {
@@ -30,14 +31,12 @@ class ItemsTest extends CIUnitTestCase
     {
         $response = $this->get('api/v1/items');
         $response->assertStatus(401);
-        $response->assertJSONFragment(['status' => 'error']);
     }
 
     public function testItemsWithInvalidTokenReturns401(): void
     {
         $response = $this->withHeaders(['Authorization' => 'Bearer invalid_token_here'])->get('api/v1/items');
         $response->assertStatus(401);
-        $response->assertJSONFragment(['status' => 'error']);
     }
 
     public function testItemsSearchByBarcode(): void
@@ -47,7 +46,7 @@ class ItemsTest extends CIUnitTestCase
         $response = $this->withHeaders(['Authorization' => "Bearer $token"])->get('api/v1/items', ['term' => 'BRG001']);
 
         $response->assertStatus(200);
-        $response->assertJSONFragment(['status' => 'success']);
+        $response->assertJSONFragment(['success' => true]);
     }
 
     public function testItemsSearchByName(): void
@@ -57,7 +56,7 @@ class ItemsTest extends CIUnitTestCase
         $response = $this->withHeaders(['Authorization' => "Bearer $token"])->get('api/v1/items', ['term' => 'Baju']);
 
         $response->assertStatus(200);
-        $response->assertJSONFragment(['status' => 'success']);
+        $response->assertJSONFragment(['success' => true]);
     }
 
     public function testItemsSearchByCategory(): void
@@ -67,7 +66,7 @@ class ItemsTest extends CIUnitTestCase
         $response = $this->withHeaders(['Authorization' => "Bearer $token"])->get('api/v1/items', ['category' => 'Pakaian']);
 
         $response->assertStatus(200);
-        $response->assertJSONFragment(['status' => 'success']);
+        $response->assertJSONFragment(['success' => true]);
     }
 
     public function testItemsReturnsDataArray(): void

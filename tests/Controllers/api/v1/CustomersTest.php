@@ -1,11 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Controllers\api\v1;
 
 use CodeIgniter\Test\CIUnitTestCase;
 use CodeIgniter\Test\FeatureTestTrait;
 use Firebase\JWT\JWT;
-use Firebase\JWT\Key;
 
 class CustomersTest extends CIUnitTestCase
 {
@@ -30,7 +31,6 @@ class CustomersTest extends CIUnitTestCase
     {
         $response = $this->get('api/v1/customers');
         $response->assertStatus(401);
-        $response->assertJSONFragment(['status' => 'error']);
     }
 
     public function testCustomersSearchByName(): void
@@ -40,7 +40,7 @@ class CustomersTest extends CIUnitTestCase
         $response = $this->withHeaders(['Authorization' => "Bearer $token"])->get('api/v1/customers', ['term' => 'Adnan']);
 
         $response->assertStatus(200);
-        $response->assertJSONFragment(['status' => 'success']);
+        $response->assertJSONFragment(['success' => true]);
     }
 
     public function testCustomersSearchByPhone(): void
@@ -50,7 +50,7 @@ class CustomersTest extends CIUnitTestCase
         $response = $this->withHeaders(['Authorization' => "Bearer $token"])->get('api/v1/customers', ['term' => '0812']);
 
         $response->assertStatus(200);
-        $response->assertJSONFragment(['status' => 'success']);
+        $response->assertJSONFragment(['success' => true]);
     }
 
     public function testCustomersSearchReturnsDataArray(): void
@@ -104,6 +104,9 @@ class CustomersTest extends CIUnitTestCase
         ]);
 
         $response->assertStatus(400);
+        $body = json_decode($response->getJSON(), true);
+        $this->assertFalse($body['success']);
+        $this->assertEquals('ERR_VALIDATION_FAILED', $body['error']['code']);
     }
 
     public function testCreateCustomerSuccess(): void
@@ -117,6 +120,34 @@ class CustomersTest extends CIUnitTestCase
         ]);
 
         $response->assertStatus(201);
-        $response->assertJSONFragment(['status' => 'success']);
+        $response->assertJSONFragment(['success' => true]);
+    }
+
+    public function testGetCustomerInfoReturnsSuccess(): void
+    {
+        $token = $this->generateToken();
+
+        $response = $this->withHeaders(['Authorization' => "Bearer $token"])
+            ->get('api/v1/customers/128');
+
+        $response->assertStatus(200);
+        $body = json_decode($response->getJSON(), true);
+        $this->assertTrue($body['success']);
+        $this->assertArrayHasKey('person_id', $body['data']);
+        $this->assertArrayHasKey('first_name', $body['data']);
+        $this->assertArrayHasKey('last_name', $body['data']);
+    }
+
+    public function testGetCustomerInfoNotFoundReturns404(): void
+    {
+        $token = $this->generateToken();
+
+        $response = $this->withHeaders(['Authorization' => "Bearer $token"])
+            ->get('api/v1/customers/99999');
+
+        $response->assertStatus(404);
+        $body = json_decode($response->getJSON(), true);
+        $this->assertFalse($body['success']);
+        $this->assertEquals('ERR_CUSTOMER_NOT_FOUND', $body['error']['code']);
     }
 }

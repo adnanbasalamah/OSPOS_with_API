@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controllers\api\v1;
 
 use App\Models\Customer;
@@ -8,6 +10,37 @@ use CodeIgniter\RESTful\ResourceController;
 
 class Customers extends ResourceController
 {
+    public function show($id = null): ResponseInterface
+    {
+        $customer = model(Customer::class);
+        $info = $customer->get_info((int)$id);
+
+        if (!$info || !isset($info->person_id) || (int)$info->person_id < 1) {
+            return $this->response
+                ->setJSON([
+                    'success' => false,
+                    'error' => [
+                        'code' => 'ERR_CUSTOMER_NOT_FOUND',
+                        'message' => 'Customer not found.',
+                    ],
+                ])
+                ->setStatusCode(404);
+        }
+
+        return $this->response
+            ->setJSON([
+                'success' => true,
+                'data' => [
+                    'person_id' => (int)$info->person_id,
+                    'first_name' => $info->first_name ?? '',
+                    'last_name' => $info->last_name ?? '',
+                    'email' => $info->email ?? '',
+                    'phone_number' => $info->phone_number ?? '',
+                ],
+            ])
+            ->setStatusCode(200);
+    }
+
     public function index(): ResponseInterface
     {
         $term = $this->request->getVar('term');
@@ -35,10 +68,12 @@ class Customers extends ResourceController
                 }
             }
 
-            return $this->respond([
-                'status' => 'success',
-                'data' => $customers,
-            ]);
+            return $this->response
+                ->setJSON([
+                    'success' => true,
+                    'data' => $customers,
+                ])
+                ->setStatusCode(200);
         }
 
         $result = $customer->get_all((int)$limit, 0);
@@ -58,10 +93,12 @@ class Customers extends ResourceController
             ];
         }
 
-        return $this->respond([
-            'status' => 'success',
-            'data' => $allCustomers,
-        ]);
+        return $this->response
+            ->setJSON([
+                'success' => true,
+                'data' => $allCustomers,
+            ])
+            ->setStatusCode(200);
     }
 
     public function create(): ResponseInterface
@@ -69,10 +106,15 @@ class Customers extends ResourceController
         $input = $this->request->getJSON(true) ?? $this->request->getPost() ?? [];
 
         if (empty($input['first_name']) || empty($input['last_name'])) {
-            return $this->respond([
-                'status' => 'error',
-                'message' => 'Nama depan dan belakang wajib diisi.',
-            ], 400);
+            return $this->response
+                ->setJSON([
+                    'success' => false,
+                    'error' => [
+                        'code' => 'ERR_VALIDATION_FAILED',
+                        'message' => 'Nama depan dan belakang wajib diisi.',
+                    ],
+                ])
+                ->setStatusCode(400);
         }
 
         $person_data = [
@@ -101,18 +143,25 @@ class Customers extends ResourceController
 
         $customer = model(Customer::class);
         if ($customer->save_customer($person_data, $customer_data)) {
-            return $this->respond([
-                'status' => 'success',
-                'data' => [
-                    'person_id' => $person_data['person_id'],
-                    'message' => 'Pelanggan berhasil ditambahkan.',
-                ],
-            ], 201);
+            return $this->response
+                ->setJSON([
+                    'success' => true,
+                    'data' => [
+                        'person_id' => $person_data['person_id'],
+                        'message' => 'Pelanggan berhasil ditambahkan.',
+                    ],
+                ])
+                ->setStatusCode(201);
         }
 
-        return $this->respond([
-            'status' => 'error',
-            'message' => 'Gagal menyimpan data pelanggan.',
-        ], 500);
+        return $this->response
+            ->setJSON([
+                'success' => false,
+                'error' => [
+                    'code' => 'ERR_SAVE_FAILED',
+                    'message' => 'Gagal menyimpan data pelanggan.',
+                ],
+            ])
+            ->setStatusCode(500);
     }
 }
