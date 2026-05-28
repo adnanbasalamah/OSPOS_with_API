@@ -2,10 +2,10 @@
 
 ## Phase 1: Database & Configuration
 
-- [ ] Task: Create migration to add permission and config defaults
-    - [ ] INSERT permission `reports_profit_loss` (module: reports)
-    - [ ] INSERT grant for admin (person_id=1)
-    - [ ] INSERT default config `balance_cash_initial = 0`, `balance_bank_initial = 0`
+- [x] Task: Create migration to add permission and config defaults [14afde4]
+    - [x] INSERT permission `reports_profit_loss` (module: reports)
+    - [x] INSERT grant for admin (person_id=1)
+    - [x] INSERT default config `balance_cash_initial = 0`, `balance_bank_initial = 0`
 - [ ] Task: Write tests for config save/retrieve of saldo awal
     - [ ] Test config values can be saved and retrieved
     - [ ] Test default values are 0
