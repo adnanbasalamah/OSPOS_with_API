@@ -1,6 +1,6 @@
 # Implementation Plan: Dashboard API for Mobile App
 
-## Phase 1: Controller & Route Setup
+## Phase 1: Controller & Route Setup [checkpoint: 00515b7]
 
 - [x] Task: Create Dashboard controller class (f3c9535)
     - [x] Write failing test for Dashboard controller class existence and method signature
