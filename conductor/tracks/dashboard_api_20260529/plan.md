@@ -2,11 +2,11 @@
 
 ## Phase 1: Controller & Route Setup
 
-- [ ] Task: Create Dashboard controller class
-    - [ ] Write failing test for Dashboard controller class existence and method signature
-    - [ ] Implement `App\Controllers\api\v1\Dashboard` extending `ResourceController`
-    - [ ] Implement stub `index()` method returning empty success response
-    - [ ] Verify tests pass
+- [x] Task: Create Dashboard controller class (f3c9535)
+    - [x] Write failing test for Dashboard controller class existence and method signature
+    - [x] Implement `App\Controllers\api\v1\Dashboard` extending `ResourceController`
+    - [x] Implement stub `index()` method returning empty success response
+    - [x] Verify tests pass
 - [ ] Task: Register API route and JWT filter
     - [ ] Write failing test verifying route `GET /api/v1/dashboard` is registered
     - [ ] Add route to `app/Config/Routes.php` under `api/v1` group
