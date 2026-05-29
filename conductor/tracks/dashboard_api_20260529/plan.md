@@ -30,7 +30,7 @@
     - [x] Verify tests pass
 - [ ] Task: Conductor - User Manual Verification 'Dashboard Data Queries' (Protocol in workflow.md)
 
-## Phase 3: Dashboard API Endpoint Integration
+## Phase 3: Dashboard API Endpoint Integration [checkpoint: 6633554]
 
 - [x] Task: Implement date parameter validation (b8a04df)
     - [x] Write failing test for invalid date format returning 400 error
