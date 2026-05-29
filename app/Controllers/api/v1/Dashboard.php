@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controllers\api\v1;
 
+use App\Models\Dashboard_model;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
 
@@ -38,13 +39,19 @@ class Dashboard extends ResourceController
                 ->setStatusCode(400);
         }
 
+        $today = date('Y-m-d');
+        $dateFrom = $dateFrom ?? $today;
+        $dateTo = $dateTo ?? $dateFrom;
+
+        $model = model(Dashboard_model::class);
+
         return $this->response
             ->setJSON([
                 'success' => true,
                 'data' => [
-                    'total_transactions' => 0,
-                    'total_revenue' => 0.0,
-                    'hourly_revenue' => $this->buildEmptyHourlyRevenue(),
+                    'total_transactions' => $model->getTotalTransactions($dateFrom, $dateTo),
+                    'total_revenue' => $model->getTotalRevenue($dateFrom, $dateTo),
+                    'hourly_revenue' => $model->getHourlyRevenue($dateFrom, $dateTo),
                 ],
             ])
             ->setStatusCode(200);
@@ -54,17 +61,5 @@ class Dashboard extends ResourceController
     {
         $d = \DateTime::createFromFormat('Y-m-d', $date);
         return $d !== false && $d->format('Y-m-d') === $date;
-    }
-
-    private function buildEmptyHourlyRevenue(): array
-    {
-        $hourly = [];
-        for ($hour = 6; $hour <= 22; $hour++) {
-            $hourly[] = [
-                'hour' => $hour,
-                'revenue' => 0.0,
-            ];
-        }
-        return $hourly;
     }
 }
