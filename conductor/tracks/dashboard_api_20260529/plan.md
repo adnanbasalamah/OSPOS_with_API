@@ -16,18 +16,18 @@
 
 ## Phase 2: Dashboard Data Queries
 
-- [ ] Task: Implement total_transactions query
-    - [ ] Write failing test for query returning count of completed sales in date range
-    - [ ] Implement query against `sales` table with `sale_status = 'complete'` and date filtering
-    - [ ] Verify tests pass
-- [ ] Task: Implement total_revenue query
-    - [ ] Write failing test for query returning sum of revenue (accounting for discounts)
-    - [ ] Implement query summing `(unit_price * quantity_purchased - discounts)` from `sales_items` joined with `sales`
-    - [ ] Verify tests pass
-- [ ] Task: Implement hourly_revenue query
-    - [ ] Write failing test for query returning 24-hour revenue breakdown
-    - [ ] Implement query grouping by `HOUR(sale_time)` with revenue aggregation, ensuring all 24 hours are represented
-    - [ ] Verify tests pass
+- [x] Task: Implement total_transactions query (b8a04df)
+    - [x] Write failing test for query returning count of completed sales in date range
+    - [x] Implement query against `sales` table with `sale_status = 'complete'` and date filtering
+    - [x] Verify tests pass
+- [x] Task: Implement total_revenue query (b8a04df)
+    - [x] Write failing test for query returning sum of revenue (accounting for discounts)
+    - [x] Implement query summing payment_amount from sales_payments joined with completed sales
+    - [x] Verify tests pass
+- [x] Task: Implement hourly_revenue query (b8a04df)
+    - [x] Write failing test for query returning hourly revenue breakdown
+    - [x] Implement query grouping by `HOUR(sale_time)` with payment aggregation, filling zeros for hours 6-22
+    - [x] Verify tests pass
 - [ ] Task: Conductor - User Manual Verification 'Dashboard Data Queries' (Protocol in workflow.md)
 
 ## Phase 3: Dashboard API Endpoint Integration
