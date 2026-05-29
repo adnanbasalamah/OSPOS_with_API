@@ -9,7 +9,7 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [ ] **Track: Dashboard API for Mobile App**
+- [~] **Track: Dashboard API for Mobile App**
 *Link: [./tracks/dashboard_api_20260529/](./tracks/dashboard_api_20260529/)*
 
 
