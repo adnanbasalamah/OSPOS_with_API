@@ -6,7 +6,7 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class Dashboard_model extends Model
+class DashboardModel extends Model
 {
     protected $table = 'sales';
     protected $primaryKey = 'sale_id';
@@ -24,15 +24,12 @@ class Dashboard_model extends Model
 
     public function getTotalRevenue(string $dateFrom, string $dateTo): float
     {
-        $saleIds = $this->getCompletedSaleIds($dateFrom, $dateTo);
-
-        if (empty($saleIds)) {
-            return 0.0;
-        }
-
-        $builder = $this->db->table('sales_payments');
-        $builder->select('COALESCE(SUM(payment_amount), 0) AS total', false)
-            ->whereIn('sale_id', $saleIds);
+        $builder = $this->db->table('sales AS s');
+        $builder->select('COALESCE(SUM(sp.payment_amount), 0) AS total', false)
+            ->join('sales_payments AS sp', 's.sale_id = sp.sale_id')
+            ->where('s.sale_status', COMPLETED)
+            ->where('DATE(s.sale_time) >=', $dateFrom)
+            ->where('DATE(s.sale_time) <=', $dateTo);
 
         return (float)($builder->get()->getRow()->total ?? 0);
     }
@@ -66,15 +63,4 @@ class Dashboard_model extends Model
         return $hourly;
     }
 
-    private function getCompletedSaleIds(string $dateFrom, string $dateTo): array
-    {
-        $builder = $this->db->table('sales');
-        $builder->select('sale_id')
-            ->where('sale_status', COMPLETED)
-            ->where('DATE(sale_time) >=', $dateFrom)
-            ->where('DATE(sale_time) <=', $dateTo);
-
-        $result = $builder->get()->getResultArray();
-        return array_column($result, 'sale_id');
-    }
 }

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controllers\api\v1;
 
-use App\Models\Dashboard_model;
+use App\Models\DashboardModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
 
@@ -15,35 +15,25 @@ class Dashboard extends ResourceController
         $dateFrom = $this->request->getGet('date_from');
         $dateTo = $this->request->getGet('date_to');
 
-        if ($dateFrom !== null && !$this->isValidDate($dateFrom)) {
-            return $this->response
-                ->setJSON([
-                    'success' => false,
-                    'error' => [
-                        'code' => 'ERR_VALIDATION_FAILED',
-                        'message' => 'Invalid date format. Use YYYY-MM-DD.',
-                    ],
-                ])
-                ->setStatusCode(400);
-        }
-
-        if ($dateTo !== null && !$this->isValidDate($dateTo)) {
-            return $this->response
-                ->setJSON([
-                    'success' => false,
-                    'error' => [
-                        'code' => 'ERR_VALIDATION_FAILED',
-                        'message' => 'Invalid date format. Use YYYY-MM-DD.',
-                    ],
-                ])
-                ->setStatusCode(400);
+        foreach (['date_from' => $dateFrom, 'date_to' => $dateTo] as $param => $value) {
+            if ($value !== null && !$this->isValidDate($value)) {
+                return $this->response
+                    ->setJSON([
+                        'success' => false,
+                        'error' => [
+                            'code' => 'ERR_VALIDATION_FAILED',
+                            'message' => "Invalid date format for {$param}. Use YYYY-MM-DD.",
+                        ],
+                    ])
+                    ->setStatusCode(400);
+            }
         }
 
         $today = date('Y-m-d');
         $dateFrom = $dateFrom ?? $today;
         $dateTo = $dateTo ?? $dateFrom;
 
-        $model = model(Dashboard_model::class);
+        $model = model(DashboardModel::class);
 
         return $this->response
             ->setJSON([

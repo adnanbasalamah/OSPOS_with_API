@@ -66,6 +66,31 @@ class DashboardTest extends CIUnitTestCase
         $this->assertCount(17, $body['data']['hourly_revenue']);
     }
 
+    public function testDashboardWithInvalidDateToReturns400(): void
+    {
+        $token = $this->generateToken();
+
+        $response = $this->withHeaders(['Authorization' => "Bearer $token"])
+            ->get('api/v1/dashboard', ['date_to' => 'invalid-date']);
+
+        $response->assertStatus(400);
+        $body = json_decode($response->getJSON(), true);
+        $this->assertFalse($body['success']);
+        $this->assertEquals('ERR_VALIDATION_FAILED', $body['error']['code']);
+    }
+
+    public function testDashboardWithOnlyDateFromReturnsSuccess(): void
+    {
+        $token = $this->generateToken();
+
+        $response = $this->withHeaders(['Authorization' => "Bearer $token"])
+            ->get('api/v1/dashboard', ['date_from' => '2026-06-01']);
+
+        $response->assertStatus(200);
+        $body = json_decode($response->getJSON(), true);
+        $this->assertTrue($body['success']);
+    }
+
     public function testDashboardHourlyRevenueHasCorrectStructure(): void
     {
         $token = $this->generateToken();
