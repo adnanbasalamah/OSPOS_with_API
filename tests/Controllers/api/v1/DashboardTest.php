@@ -63,7 +63,7 @@ class DashboardTest extends CIUnitTestCase
         $this->assertTrue($body['success']);
         $this->assertIsInt($body['data']['total_transactions']);
         $this->assertIsNumeric($body['data']['total_revenue']);
-        $this->assertCount(24, $body['data']['hourly_revenue']);
+        $this->assertCount(17, $body['data']['hourly_revenue']);
     }
 
     public function testDashboardHourlyRevenueHasCorrectStructure(): void
@@ -85,6 +85,6 @@ class DashboardTest extends CIUnitTestCase
         }
 
         $hours = array_column($hourly, 'hour');
-        $this->assertEquals(range(0, 23), $hours);
+        $this->assertEquals(range(6, 22), $hours);
     }
 }

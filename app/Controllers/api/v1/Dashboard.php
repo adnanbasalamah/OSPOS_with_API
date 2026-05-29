@@ -59,7 +59,7 @@ class Dashboard extends ResourceController
     private function buildEmptyHourlyRevenue(): array
     {
         $hourly = [];
-        for ($hour = 0; $hour < 24; $hour++) {
+        for ($hour = 6; $hour <= 22; $hour++) {
             $hourly[] = [
                 'hour' => $hour,
                 'revenue' => 0.0,

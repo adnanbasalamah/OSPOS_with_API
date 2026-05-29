@@ -36,7 +36,19 @@ Format matches existing API pattern: `{"success": true, "data": {...}}`
       {"hour": 6, "revenue": 450000},
       {"hour": 7, "revenue": 780000},
       {"hour": 8, "revenue": 1350000},
-      ...
+      {"hour": 9, "revenue": 1650000},
+      {"hour": 10, "revenue": 1890000},
+      {"hour": 11, "revenue": 980000},
+      {"hour": 12, "revenue": 1720000},
+      {"hour": 13, "revenue": 890000},
+      {"hour": 14, "revenue": 760000},
+      {"hour": 15, "revenue": 1150000},
+      {"hour": 16, "revenue": 1420000},
+      {"hour": 17, "revenue": 1580000},
+      {"hour": 18, "revenue": 2100000},
+      {"hour": 19, "revenue": 1850000},
+      {"hour": 20, "revenue": 1200000},
+      {"hour": 21, "revenue": 680000},
       {"hour": 22, "revenue": 320000}
     ]
   }
@@ -45,7 +57,7 @@ Format matches existing API pattern: `{"success": true, "data": {...}}`
 
 - `total_transactions`: Integer count of completed sales (`sale_status = 'complete'`) within the date range
 - `total_revenue`: Float sum of total revenue (after discounts) across all completed sales
-- `hourly_revenue`: Array of 24 objects (one per hour, 0-23), each with `hour` (int) and `revenue` (float). Hours with no transactions return `revenue: 0`.
+- `hourly_revenue`: Array of 17 objects (hours 6-22, representing 06:00 to 22:00), each with `hour` (int) and `revenue` (float). Hours with no transactions return `revenue: 0`.
 
 ### 5. Error Responses
 | Status | Code | Condition |
@@ -67,7 +79,7 @@ Error format follows existing conventions:
 ## Acceptance Criteria
 - [ ] `GET /api/v1/dashboard` returns `total_transactions` matching the count of completed sales in the date range
 - [ ] `total_revenue` correctly sums transaction values (price * quantity, accounting for discounts)
-- [ ] `hourly_revenue` contains 24 entries (hours 0-23), with correct revenue per hour
+- [ ] `hourly_revenue` contains 17 entries (hours 6-22), with correct revenue per hour
 - [ ] JWT authentication is enforced (returns 401 without valid token)
 - [ ] Invalid date format returns 400 with appropriate error message
 - [ ] Data aggregates across all stock locations
