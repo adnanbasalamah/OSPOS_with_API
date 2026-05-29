@@ -32,16 +32,16 @@
 
 ## Phase 3: Dashboard API Endpoint Integration
 
-- [ ] Task: Implement date parameter validation
-    - [ ] Write failing test for invalid date format returning 400 error
-    - [ ] Implement validation for `date_from` and `date_to` parameters (Y-m-d format)
-    - [ ] Write failing test for default behavior (no params = today)
-    - [ ] Implement default date logic (both omitted = today; only date_from = date_from)
-    - [ ] Verify tests pass
-- [ ] Task: Compose combined dashboard response
-    - [ ] Write failing integration test for full dashboard response structure
-    - [ ] Implement `index()` method composing `total_transactions`, `total_revenue`, and `hourly_revenue` into unified JSON response
-    - [ ] Write failing test for JWT auth enforcement (returns 401 without token)
-    - [ ] Implement/verify JWT filter is properly applied
-    - [ ] Verify tests pass
+- [x] Task: Implement date parameter validation (b8a04df)
+    - [x] Write failing test for invalid date format returning 400 error
+    - [x] Implement validation for `date_from` and `date_to` parameters (Y-m-d format)
+    - [x] Write failing test for default behavior (no params = today)
+    - [x] Implement default date logic (both omitted = today; only date_from = date_from)
+    - [x] Verify tests pass
+- [x] Task: Compose combined dashboard response (b8a04df)
+    - [x] Write failing integration test for full dashboard response structure
+    - [x] Implement `index()` method composing `total_transactions`, `total_revenue`, and `hourly_revenue` into unified JSON response
+    - [x] Write failing test for JWT auth enforcement (returns 401 without token)
+    - [x] Implement/verify JWT filter is properly applied
+    - [x] Verify tests pass
 - [ ] Task: Conductor - User Manual Verification 'Dashboard API Endpoint Integration' (Protocol in workflow.md)
