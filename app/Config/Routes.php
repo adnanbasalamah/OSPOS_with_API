@@ -25,6 +25,7 @@ $routes->group('api/v1', ['namespace' => 'App\Controllers\api\v1'], static funct
     $routes->get('stock/out-of-stock', 'Stock::outOfStock');
     $routes->get('stock/below-minimum', 'Stock::belowMinimum');
     $routes->patch('stock/update/(:segment)', 'Stock::update/$1');
+    $routes->get('dashboard', 'Dashboard::index');
     $routes->get('receivings', 'Receivings::index');
     $routes->get('receivings/items', 'Receivings::items');
     $routes->get('receivings/stock-locations', 'Receivings::stockLocations');
