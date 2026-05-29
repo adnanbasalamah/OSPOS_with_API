@@ -7,11 +7,11 @@
     - [x] Implement `App\Controllers\api\v1\Dashboard` extending `ResourceController`
     - [x] Implement stub `index()` method returning empty success response
     - [x] Verify tests pass
-- [ ] Task: Register API route and JWT filter
-    - [ ] Write failing test verifying route `GET /api/v1/dashboard` is registered
-    - [ ] Add route to `app/Config/Routes.php` under `api/v1` group
-    - [ ] Add route to `jwtauth` filter list in `app/Config/Filters.php`
-    - [ ] Verify tests pass
+- [x] Task: Register API route and JWT filter (f3c9535)
+    - [x] Write failing test verifying route `GET /api/v1/dashboard` is registered
+    - [x] Add route to `app/Config/Routes.php` under `api/v1` group
+    - [x] Add route to `jwtauth` filter list in `app/Config/Filters.php`
+    - [x] Verify tests pass
 - [ ] Task: Conductor - User Manual Verification 'Controller & Route Setup' (Protocol in workflow.md)
 
 ## Phase 2: Dashboard Data Queries
