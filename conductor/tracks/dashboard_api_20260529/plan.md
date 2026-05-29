@@ -14,7 +14,7 @@
     - [x] Verify tests pass
 - [ ] Task: Conductor - User Manual Verification 'Controller & Route Setup' (Protocol in workflow.md)
 
-## Phase 2: Dashboard Data Queries
+## Phase 2: Dashboard Data Queries [checkpoint: 7b6fb1f]
 
 - [x] Task: Implement total_transactions query (b8a04df)
     - [x] Write failing test for query returning count of completed sales in date range
